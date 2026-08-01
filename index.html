@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta id="themeColorMeta" name="theme-color" content="#0a0d12" />
   <title>Приём нормативов</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,23 +14,44 @@
       --text:#e8edf3; --muted:#8291a3;
       --accent:#ff7a1a; --accent-ink:#1a0f04; --accent-dim:rgba(255,122,26,.28);
       --good:#33d17a; --bad:#ff5470;
+      --bg-grad-a:#0b0f15; --bg-grad-b:#080b0f;
+      --noise-opacity:.018; --radial-accent-opacity:.10;
+      --counter-grad-a:#1b232e; --counter-grad-b:#0c1117;
+      --dashed-border:#2b3542; --hover-border:#3a4655;
+      --shadow-color:rgba(0,0,0,.7); --shadow-color-soft:rgba(0,0,0,.65);
+      --backdrop:rgba(4,6,9,.62); --logo-shadow:rgba(0,0,0,.5);
       --font-display:'Oswald',sans-serif; --font-digits:'Bebas Neue',sans-serif; --font-body:'Inter',system-ui,sans-serif;
+      color-scheme:dark;
+    }
+    :root[data-theme="light"] {
+      --bg-0:#f3f5f8; --bg-1:#ffffff; --bg-2:#eef1f5; --line:#dbe1e8;
+      --text:#1a212c; --muted:#5c6773;
+      --accent:#e8690f; --accent-ink:#ffffff; --accent-dim:rgba(232,105,15,.14);
+      --good:#1a9a5a; --bad:#d8264a;
+      --bg-grad-a:#eef1f6; --bg-grad-b:#e3e8ee;
+      --noise-opacity:.035; --radial-accent-opacity:.07;
+      --counter-grad-a:#ffffff; --counter-grad-b:#eef1f6;
+      --dashed-border:#c7cedb; --hover-border:#aab4c2;
+      --shadow-color:rgba(30,41,59,.12); --shadow-color-soft:rgba(30,41,59,.09);
+      --backdrop:rgba(15,20,28,.4); --logo-shadow:rgba(30,41,59,.2);
+      color-scheme:light;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;color:var(--text);font:15px/1.5 var(--font-body);
       background:
-        repeating-linear-gradient(135deg, rgba(255,255,255,.018) 0 2px, transparent 2px 46px),
-        radial-gradient(circle at 50% -10%, rgba(255,122,26,.10), transparent 55%),
-        linear-gradient(180deg,#0b0f15,var(--bg-0) 25%,#080b0f);
+        repeating-linear-gradient(135deg, rgba(127,127,127,var(--noise-opacity)) 0 2px, transparent 2px 46px),
+        radial-gradient(circle at 50% -10%, rgba(255,122,26,var(--radial-accent-opacity)), transparent 55%),
+        linear-gradient(180deg,var(--bg-grad-a),var(--bg-0) 25%,var(--bg-grad-b));
       background-attachment:fixed;
+      transition:background-color .3s ease,color .3s ease;
     }
     .wrap{max-width:980px;margin:0 auto;padding:36px 18px 60px}
 
     .site-header{text-align:center;margin-bottom:26px}
     .logo{width:104px;height:104px;border-radius:50%;margin-bottom:10px;
-      filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+      filter:drop-shadow(0 8px 20px var(--logo-shadow))}
     .kicker{font-family:var(--font-display);text-transform:uppercase;letter-spacing:.3em;font-size:11px;color:var(--accent);font-weight:600}
     h1{margin:8px 0 4px;font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;font-size:32px}
     .subtitle{margin:0;color:var(--muted);font-size:13.5px}
@@ -37,7 +59,7 @@
       background:repeating-linear-gradient(115deg, var(--accent) 0 10px, transparent 10px 20px)}
 
     .panel{background:var(--bg-1);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:20px;
-      padding:22px;box-shadow:0 24px 60px -28px rgba(0,0,0,.7);transition:border-top-color .3s ease}
+      padding:22px;box-shadow:0 24px 60px -28px var(--shadow-color);transition:border-top-color .3s ease,background-color .3s ease,box-shadow .3s ease}
 
     .top-bar{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line)}
     .icon-btn{width:42px;height:42px;flex:none;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);
@@ -46,14 +68,15 @@
     .current-tab{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-weight:600;font-size:15px;
       text-transform:uppercase;letter-spacing:.03em;color:var(--text)}
     .current-tab svg{color:var(--accent);flex:none}
+    .top-bar-right{display:flex;align-items:center;gap:12px;margin-left:auto}
 
-    .drawer-backdrop{position:fixed;inset:0;background:rgba(4,6,9,.62);backdrop-filter:blur(2px);
+    .drawer-backdrop{position:fixed;inset:0;background:var(--backdrop);backdrop-filter:blur(2px);
       opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:40}
     .drawer-backdrop.open{opacity:1;pointer-events:auto}
     .drawer{position:fixed;top:0;left:0;height:100%;width:280px;max-width:82vw;background:var(--bg-1);
       border-right:1px solid var(--line);z-index:50;transform:translateX(-100%);
-      transition:transform .28s cubic-bezier(.22,.8,.25,1);display:flex;flex-direction:column;
-      box-shadow:20px 0 60px -20px rgba(0,0,0,.7)}
+      transition:transform .28s cubic-bezier(.22,.8,.25,1),background-color .3s ease;display:flex;flex-direction:column;
+      box-shadow:20px 0 60px -20px var(--shadow-color)}
     .drawer.open{transform:translateX(0)}
     .drawer-header{display:flex;align-items:center;justify-content:space-between;padding:18px;
       border-bottom:1px solid var(--line);font-family:var(--font-display);text-transform:uppercase;
@@ -78,9 +101,10 @@
 
     .counter{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;
       border-radius:18px;border:1px solid var(--line);min-height:224px;gap:4px;padding:20px 16px;
-      background:radial-gradient(120% 140% at 50% -10%, #1b232e 0%, #0c1117 65%)}
+      background:radial-gradient(120% 140% at 50% -10%, var(--counter-grad-a) 0%, var(--counter-grad-b) 65%);
+      transition:background-color .3s ease,border-color .3s ease}
     .counter::before{content:"";position:absolute;inset:0;pointer-events:none;
-      background:repeating-linear-gradient(180deg, rgba(255,255,255,.02) 0 2px, transparent 2px 4px)}
+      background:repeating-linear-gradient(180deg, rgba(127,127,127,.025) 0 2px, transparent 2px 4px)}
     .counter .eyebrow{position:relative;font-family:var(--font-display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
     .value-row{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
     .digits-input{width:180px;text-align:center;background:transparent;border:none;padding:0;
@@ -98,7 +122,7 @@
       background:var(--bg-2);color:var(--text);font-family:var(--font-digits);font-size:22px;letter-spacing:.03em}
     .value-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 
-    .tap-area{margin-top:18px;border-radius:16px;border:2px dashed #2b3542;background:var(--bg-2);min-height:130px;
+    .tap-area{margin-top:18px;border-radius:16px;border:2px dashed var(--dashed-border);background:var(--bg-2);min-height:130px;
       display:flex;align-items:center;justify-content:center;text-align:center;padding:0 22px;
       font-family:var(--font-display);font-size:14px;letter-spacing:.02em;text-transform:uppercase;font-weight:600;
       color:var(--muted);cursor:pointer;user-select:none;touch-action:manipulation;transition:.15s}
@@ -110,7 +134,7 @@
     .controls button{padding:13px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);color:var(--text);
       font-family:var(--font-display);font-weight:600;font-size:13.5px;text-transform:uppercase;letter-spacing:.03em;
       cursor:pointer;transition:.15s}
-    .controls button:hover{border-color:#3a4655}
+    .controls button:hover{border-color:var(--hover-border)}
     .controls button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
     .controls button.primary:hover{filter:brightness(1.08)}
     .controls button.warn{background:transparent;border-color:var(--bad);color:var(--bad)}
@@ -139,13 +163,13 @@
       display:flex;flex-direction:column;gap:8px;width:min(92vw,420px);pointer-events:none}
     .toast{pointer-events:auto;padding:12px 16px;border-radius:12px;font-family:var(--font-body);
       font-size:13.5px;font-weight:500;text-align:center;background:var(--bg-1);border:1px solid var(--line);
-      color:var(--text);box-shadow:0 16px 40px -14px rgba(0,0,0,.65);
+      color:var(--text);box-shadow:0 16px 40px -14px var(--shadow-color-soft);
       opacity:0;transform:translateY(14px);transition:opacity .25s ease,transform .25s ease}
     .toast.show{opacity:1;transform:translateY(0)}
     .toast.success{border-color:var(--good);color:var(--good)}
     .toast.error{border-color:var(--bad);color:var(--bad)}
 
-    .conn-dot{width:9px;height:9px;border-radius:50%;background:#4a5568;flex:none;transition:.2s;margin-left:auto}
+    .conn-dot{width:9px;height:9px;border-radius:50%;background:#8b96a5;flex:none;transition:.2s}
     .conn-dot.ok{background:var(--good);box-shadow:0 0 8px var(--good)}
     .conn-dot.err{background:var(--bad);box-shadow:0 0 8px var(--bad)}
 
@@ -181,7 +205,10 @@
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
         </button>
         <div class="current-tab" id="currentTab"></div>
-        <span class="conn-dot" id="connDot" title="Статус последней отправки в таблицу"></span>
+        <div class="top-bar-right">
+          <button id="themeToggle" class="icon-btn" aria-label="Переключить тему" title="Светлая/тёмная тема"></button>
+          <span class="conn-dot" id="connDot" title="Статус последней отправки в таблицу"></span>
+        </div>
       </div>
       <div id="sections"></div>
     </div>
@@ -226,6 +253,26 @@
       throw:    icon('<line x1="5" y1="19" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/>'),
       shooting: icon('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>')
     };
+
+    // ---------- переключение темы (тёмная/светлая) ----------
+    const THEME_KEY = 'normativy_theme_v1';
+    const THEME_COLOR = { dark: '#0a0d12', light: '#f3f5f8' };
+    const SUN_ICON = icon('<circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.3" x2="12" y2="4.7"/><line x1="12" y1="19.3" x2="12" y2="21.7"/><line x1="4.1" y1="4.1" x2="5.8" y2="5.8"/><line x1="18.2" y1="18.2" x2="19.9" y2="19.9"/><line x1="2.3" y1="12" x2="4.7" y2="12"/><line x1="19.3" y1="12" x2="21.7" y2="12"/><line x1="4.1" y1="19.9" x2="5.8" y2="18.2"/><line x1="18.2" y1="5.8" x2="19.9" y2="4.1"/>');
+    const MOON_ICON = icon('<path d="M20.2 14.6A8.6 8.6 0 1 1 9.4 3.8a7 7 0 0 0 10.8 10.8Z"/>');
+    const themeToggleEl = document.getElementById('themeToggle');
+    const themeColorMetaEl = document.getElementById('themeColorMeta');
+
+    function applyTheme(theme){
+      document.documentElement.setAttribute('data-theme', theme);
+      themeToggleEl.innerHTML = theme === 'light' ? MOON_ICON : SUN_ICON;
+      themeToggleEl.setAttribute('aria-label', theme === 'light' ? 'Включить тёмную тему' : 'Включить светлую тему');
+      themeColorMetaEl.setAttribute('content', THEME_COLOR[theme]);
+      localStorage.setItem(THEME_KEY, theme);
+    }
+    applyTheme(localStorage.getItem(THEME_KEY) === 'light' ? 'light' : 'dark');
+    themeToggleEl.addEventListener('click', ()=>{
+      applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
 
     // ==== Описание вкладок ====
     // kind: 'counter' (счётчик повторений: тап + −/+ + ручной ввод, без старт/стоп),
