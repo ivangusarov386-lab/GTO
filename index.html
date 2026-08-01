@@ -69,8 +69,10 @@
       text-transform:uppercase;letter-spacing:.03em;color:var(--text)}
     .current-tab svg{color:var(--accent);flex:none}
 
-    .top-fixed-bar{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 14px);
-      right:calc(env(safe-area-inset-right, 0px) + 14px);z-index:45;display:flex;align-items:center;gap:10px}
+    .top-fixed-left{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 14px);
+      left:calc(env(safe-area-inset-left, 0px) + 14px);z-index:45}
+    .top-fixed-right{position:fixed;top:calc(env(safe-area-inset-top, 0px) + 14px);
+      right:calc(env(safe-area-inset-right, 0px) + 14px);z-index:45}
     .menu-toggle-fixed{display:flex;align-items:center;gap:8px;height:42px;flex:none;padding:0 16px 0 14px;
       border-radius:12px;border:1px solid var(--line);background:var(--bg-2);color:var(--text);
       font-family:var(--font-display);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em;
@@ -79,7 +81,8 @@
     .menu-toggle-fixed svg{flex:none}
     .theme-toggle-fixed{box-shadow:0 10px 26px -14px var(--shadow-color)}
     @media (max-width:520px){
-      .top-fixed-bar{top:calc(env(safe-area-inset-top, 0px) + 10px);right:calc(env(safe-area-inset-right, 0px) + 10px);gap:8px}
+      .top-fixed-left{top:calc(env(safe-area-inset-top, 0px) + 10px);left:calc(env(safe-area-inset-left, 0px) + 10px)}
+      .top-fixed-right{top:calc(env(safe-area-inset-top, 0px) + 10px);right:calc(env(safe-area-inset-right, 0px) + 10px)}
       .theme-toggle-fixed{width:38px;height:38px}
       .menu-toggle-fixed{height:38px;padding:0 12px}
       .menu-toggle-fixed span{display:none}
@@ -223,11 +226,13 @@
     </div>
   </div>
 
-  <div class="top-fixed-bar">
+  <div class="top-fixed-left">
     <button id="menuToggle" class="menu-toggle-fixed" aria-label="Открыть список нормативов">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
       <span>Нормативы</span>
     </button>
+  </div>
+  <div class="top-fixed-right">
     <button id="themeToggle" class="icon-btn theme-toggle-fixed" aria-label="Переключить тему" title="Светлая/тёмная тема"></button>
   </div>
 
