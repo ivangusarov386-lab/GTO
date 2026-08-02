@@ -14,6 +14,7 @@
       --text:#e8edf3; --muted:#8291a3;
       --accent:#ff7a1a; --accent-ink:#1a0f04; --accent-dim:rgba(255,122,26,.28);
       --good:#33d17a; --bad:#ff5470;
+      --good-dim:rgba(51,209,122,.28); --bad-dim:rgba(255,84,112,.28);
       --bg-grad-a:#0b0f15; --bg-grad-b:#080b0f;
       --noise-opacity:.018; --radial-accent-opacity:.10;
       --counter-grad-a:#1b232e; --counter-grad-b:#0c1117;
@@ -28,6 +29,7 @@
       --text:#1a212c; --muted:#5c6773;
       --accent:#e8690f; --accent-ink:#ffffff; --accent-dim:rgba(232,105,15,.14);
       --good:#1a9a5a; --bad:#d8264a;
+      --good-dim:rgba(26,154,90,.22); --bad-dim:rgba(216,38,74,.22);
       --bg-grad-a:#eef1f6; --bg-grad-b:#e3e8ee;
       --noise-opacity:.035; --radial-accent-opacity:.07;
       --counter-grad-a:#ffffff; --counter-grad-b:#eef1f6;
@@ -154,11 +156,12 @@
     .controls button.warn:hover{background:rgba(255,84,112,.1)}
     .controls button:disabled{opacity:.4;cursor:not-allowed}
 
-    label{display:block;font-family:var(--font-display);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+    label{display:block;text-align:center;font-family:var(--font-display);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
     input[type="text"],input[type="number"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);
       background:var(--bg-2);color:var(--text);font-family:var(--font-body);font-weight:500;font-size:15px;transition:.15s}
     input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
-    input.invalid,.value-input.invalid{border-color:var(--bad) !important;box-shadow:0 0 0 3px rgba(255,84,112,.28) !important}
+    input.invalid,.value-input.invalid{border-color:var(--bad) !important;box-shadow:0 0 0 3px var(--bad-dim) !important}
+    input.valid,.value-input.valid{border-color:var(--good) !important;box-shadow:0 0 0 3px var(--good-dim) !important}
     .hint{font-size:12px;color:var(--muted);margin-top:8px}
 
     table{width:100%;border-collapse:separate;border-spacing:0;margin-top:22px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -355,14 +358,24 @@
       connDot.classList.add(ok ? 'ok' : 'err');
     }
 
-    // проверяет поля, подсвечивает пустые красным, снимает подсветку при вводе; возвращает true, если всё заполнено
+    // подсвечивает поле красным, если оно пустое, зелёным — если заполнено
+    function markFieldState(el){
+      const filled = (el.value||'').trim() !== '';
+      el.classList.toggle('valid', filled);
+      el.classList.toggle('invalid', !filled);
+    }
+    // навешивает живую подсветку поля (красная/зелёная), актуальную при каждом вводе
+    function watchField(el){
+      markFieldState(el);
+      el.addEventListener('input', () => markFieldState(el));
+    }
+
+    // проверяет поля перед сохранением; возвращает true, если всё заполнено
     function validateFields(fields){
       let ok = true;
       fields.forEach(el=>{
-        const filled = (el.value||'').trim() !== '';
-        el.classList.toggle('invalid', !filled);
-        if (!filled) ok = false;
-        el.oninput = () => el.classList.remove('invalid');
+        markFieldState(el);
+        if ((el.value||'').trim() === '') ok = false;
       });
       if (!ok) showToast('Заполните номер участника и результат', 'error');
       return ok;
@@ -523,11 +536,14 @@
       const STORAGE_KEY = 'normativy_' + id + '_v1';
       let results = loadArr(STORAGE_KEY);
 
+      watchField(digits); watchField(participantInput);
+
       function getCount(){ return parseInt(digits.value, 10) || 0; }
       function setCount(v){
         digits.value = String(Math.max(0, v));
         digits.classList.add('pulse');
         setTimeout(()=>digits.classList.remove('pulse'), 90);
+        markFieldState(digits);
       }
       function renderTable(){
         tableBody.innerHTML = tableRowsHtml(results);
@@ -536,7 +552,7 @@
       function dec(){ setCount(getCount()-1); }
       function doReset(){
         digits.value=''; participantInput.value='';
-        digits.classList.remove('invalid'); participantInput.classList.remove('invalid');
+        markFieldState(digits); markFieldState(participantInput);
       }
 
       tapArea.addEventListener('click', inc);
@@ -615,6 +631,8 @@
       const step = cfg.step || 1;
       let results = loadArr(STORAGE_KEY);
 
+      watchField(participantInput); watchField(resultInput);
+
       function renderTable(){
         tableBody.innerHTML = tableRowsHtml(results);
       }
@@ -622,10 +640,11 @@
         const cur = parseFloat(resultInput.value) || 0;
         const next = Math.round((cur + delta) * 100) / 100;
         resultInput.value = next;
+        markFieldState(resultInput);
       }
       function doReset(){
         participantInput.value=''; resultInput.value='';
-        participantInput.classList.remove('invalid'); resultInput.classList.remove('invalid');
+        markFieldState(participantInput); markFieldState(resultInput);
       }
       plusBtn.addEventListener('click', ()=>nudge(step));
       minusBtn.addEventListener('click', ()=>nudge(-step));
@@ -715,6 +734,8 @@
       let running = false, elapsedMs = 0, timerHandle = null, lastTick = null;
       let frozen1 = false, frozen2 = false;
 
+      watchField(p1); watchField(p2); watchField(d1); watchField(d2);
+
       function getResults(){ return loadArr(STORAGE_KEY); }
       function renderTable(){ tableBody.innerHTML = tableRowsHtml(getResults()); }
 
@@ -724,8 +745,8 @@
         lastTick = now;
         const secs = (elapsedMs/1000).toFixed(2);
         masterDigits.textContent = secs;
-        if (!frozen1) d1.value = secs;
-        if (!frozen2) d2.value = secs;
+        if (!frozen1) { d1.value = secs; markFieldState(d1); }
+        if (!frozen2) { d2.value = secs; markFieldState(d2); }
       }
 
       function resetSlots(){
@@ -734,7 +755,7 @@
         elapsedMs = 0; frozen1 = false; frozen2 = false;
         masterDigits.textContent = '0.00';
         p1.value=''; p2.value=''; d1.value=''; d2.value='';
-        [p1,p2,d1,d2].forEach(x=>x.classList.remove('invalid'));
+        [p1,p2,d1,d2].forEach(markFieldState);
         startBtn.disabled = false; stopBtn.disabled = true;
       }
       const doReset = resetSlots;
@@ -742,6 +763,7 @@
       startBtn.addEventListener('click', ()=>{
         elapsedMs = 0; frozen1 = false; frozen2 = false;
         d1.value = ''; d2.value = ''; masterDigits.textContent = '0.00';
+        markFieldState(d1); markFieldState(d2);
         running = true;
         startBtn.disabled = true; stopBtn.disabled = false;
         lastTick = Date.now();
@@ -755,8 +777,8 @@
         lastTick = now;
         const secs = (elapsedMs/1000).toFixed(2);
         beep(); buzz();
-        if (!frozen1) { d1.value = secs; frozen1 = true; }
-        else if (!frozen2) { d2.value = secs; frozen2 = true; }
+        if (!frozen1) { d1.value = secs; frozen1 = true; markFieldState(d1); }
+        else if (!frozen2) { d2.value = secs; frozen2 = true; markFieldState(d2); }
         if (frozen1 && frozen2) {
           running = false;
           clearInterval(timerHandle); timerHandle = null;
@@ -769,6 +791,7 @@
       function nudge(input, delta){
         const cur = parseFloat(input.value) || 0;
         input.value = Math.max(0, Math.round((cur+delta)*100)/100).toFixed(2);
+        markFieldState(input);
       }
       plus1.addEventListener('click', ()=>nudge(d1, step));
       minus1.addEventListener('click', ()=>nudge(d1, -step));
@@ -785,7 +808,7 @@
         renderTable();
         await sendResult(cfg, participant, result);
         participantInput.value=''; digitsInput.value='';
-        participantInput.classList.remove('invalid'); digitsInput.classList.remove('invalid');
+        markFieldState(participantInput); markFieldState(digitsInput);
       }
       save1.addEventListener('click', ()=>saveOne(p1, d1));
       save2.addEventListener('click', ()=>saveOne(p2, d2));
