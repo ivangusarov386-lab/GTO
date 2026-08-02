@@ -125,19 +125,14 @@
       background:repeating-linear-gradient(180deg, rgba(127,127,127,.025) 0 2px, transparent 2px 4px)}
     .counter .eyebrow{position:relative;font-family:var(--font-display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
     .value-row{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px}
-    .digits-input{width:180px;text-align:center;background:transparent;border:none;padding:0;
-      font-family:var(--font-digits);font-size:104px;line-height:1;letter-spacing:.02em;color:var(--accent);
-      text-shadow:0 0 26px var(--accent-dim);transition:transform .08s ease}
-    .digits-input.pulse{transform:scale(1.06)}
-    .digits-input:focus{outline:none;box-shadow:none}
-    .digits-input::-webkit-inner-spin-button,.digits-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+    .value-input.pulse{transform:scale(1.06)}
     .adjust-btn{width:44px;height:44px;flex:none;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);color:var(--text);
       font-family:var(--font-display);font-size:20px;font-weight:800;cursor:pointer;transition:.15s}
     .adjust-btn:hover{border-color:var(--accent);color:var(--accent)}
     .value-row.small{gap:10px;justify-content:flex-start}
     .value-row.small .adjust-btn{width:38px;height:38px;font-size:16px}
     .value-input{flex:1;min-width:0;text-align:center;padding:12px 8px;border-radius:12px;border:1px solid var(--line);
-      background:var(--bg-2);color:var(--text);font-family:var(--font-digits);font-size:22px;letter-spacing:.03em}
+      background:var(--bg-2);color:var(--text);font-family:var(--font-digits);font-size:22px;letter-spacing:.03em;transition:transform .08s ease}
     .value-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 
     .tap-area{margin-top:18px;border-radius:16px;border:2px dashed var(--dashed-border);background:var(--bg-2);min-height:130px;
@@ -164,8 +159,6 @@
       background:var(--bg-2);color:var(--text);font-family:var(--font-body);font-weight:500;font-size:15px;transition:.15s}
     input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
     input.invalid,.value-input.invalid{border-color:var(--bad) !important;box-shadow:0 0 0 3px rgba(255,84,112,.28) !important}
-    .digits-input.invalid{color:var(--bad) !important;text-shadow:0 0 24px rgba(255,84,112,.45) !important}
-    .digits-input.invalid::placeholder{color:rgba(255,84,112,.55)}
     .hint{font-size:12px;color:var(--muted);margin-top:8px}
 
     table{width:100%;border-collapse:separate;border-spacing:0;margin-top:22px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -494,11 +487,11 @@
             <input id="${id}-participant" type="number" inputmode="numeric" placeholder="Введите номер участника" autocomplete="off" data-nocount>
             <p class="hint">Тапайте в зоне ниже, используйте −/+ или введите число вручную.</p>
           </div>
-          <div class="counter">
-            <div class="eyebrow">Повторения</div>
-            <div class="value-row" data-nocount>
+          <div>
+            <label for="${id}-digits">Повторения</label>
+            <div class="value-row small" data-nocount>
               <button id="${id}-minus" class="adjust-btn" title="Минус одно повторение">−</button>
-              <input id="${id}-digits" class="digits-input" type="number" inputmode="numeric" placeholder="0">
+              <input id="${id}-digits" class="value-input" type="number" inputmode="numeric" placeholder="0">
               <button id="${id}-plus" class="adjust-btn" title="Плюс одно повторение">+</button>
             </div>
           </div>
