@@ -1130,7 +1130,7 @@
       setupTabBtn.addEventListener('click', ()=>setViewMode('setup'));
       controlTabBtn.addEventListener('click', ()=>setViewMode('control'));
 
-      const lanes = Array.from({length:10}, () => ({ athlete:'', bib:'', laps:[], finished:false }));
+      const lanes = Array.from({length:10}, (_, i) => ({ athlete:'', bib:String(i+1), laps:[], finished:false }));
 
       const SAVED_RUNS_KEY = 'savedRunsV1';
       let savedRuns = loadArr(SAVED_RUNS_KEY);
@@ -1310,7 +1310,7 @@
         offset = 0;
         clearInterval(timerInterval);
         stopLanesTimer();
-        lanes.forEach(l => { l.laps = []; l.finished = false; });
+        lanes.forEach(l => { l.laps = []; l.finished = false; l.athlete = ''; });
         timerDisplay.textContent = fmt(0);
         renderLanes();
       }
