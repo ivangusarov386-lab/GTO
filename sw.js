@@ -1,6 +1,6 @@
 // Service worker: офлайн-кэш для «Приём нормативов». Судьи часто работают
 // на стадионе/в зале со слабым интернетом — сайт должен открываться и без сети.
-const CACHE_NAME = 'gto-cache-v2';
+const CACHE_NAME = 'gto-cache-v3';
 
 const APP_SHELL = [
   './',
