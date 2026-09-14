@@ -155,7 +155,12 @@
       background:var(--bg-2);color:var(--text);font-family:var(--font-display);font-weight:600;font-size:12.5px;
       text-transform:uppercase;letter-spacing:.03em;cursor:pointer;transition:.15s}
     .btn:hover{border-color:var(--hover-border)}
-    .btn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+    .btn.on{background:var(--good);border-color:var(--good);color:#04150c}
+    .btn.off{background:var(--bad);border-color:var(--bad);color:#fff;animation:btnPulse 1.6s ease-in-out infinite}
+    @keyframes btnPulse{
+      0%,100%{box-shadow:0 0 0 0 var(--bad-dim)}
+      50%{box-shadow:0 0 0 8px transparent}
+    }
 
     .timer{font-family:var(--font-digits);font-weight:400;text-align:center;
       font-size:clamp(46px,14vw,84px);letter-spacing:.02em;line-height:1;
@@ -1045,8 +1050,8 @@
 
         <div class="controls">
           <button id="${id}-startBtn" class="primary">Старт</button>
-          <button id="${id}-pauseBtn">Пауза</button>
           <button id="${id}-stopBtn" class="warn">Стоп</button>
+          <button id="${id}-pauseBtn">Пауза</button>
           <button id="${id}-resetBtn">Сброс</button>
         </div>
 
@@ -1106,7 +1111,8 @@
       let sendToGoogle = JSON.parse(localStorage.getItem(GS_KEY) || 'true');
       function updateGsToggleUI(){
         gsToggleBtn.classList.toggle('on', sendToGoogle);
-        gsToggleBtn.textContent = sendToGoogle ? 'Отправка в Google: ВКЛ' : 'Отправка в Google: ВЫКЛ';
+        gsToggleBtn.classList.toggle('off', !sendToGoogle);
+        gsToggleBtn.textContent = sendToGoogle ? 'Отправка на диск: ВКЛ' : 'Отправка на диск: ВЫКЛ';
       }
       updateGsToggleUI();
       gsToggleBtn.addEventListener('click', ()=>{
