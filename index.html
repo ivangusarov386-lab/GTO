@@ -1219,7 +1219,7 @@
           const hint = lane.finished ? 'Дистанция завершена' : 'Тап по карточке — круг';
 
           card.innerHTML = `
-            <input class="bib-input" maxlength="2" placeholder="00" value="${lane.bib || ''}">
+            <input class="bib-input" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" value="${lane.bib || ''}">
             <div class="lane-meta">
               <span class="eyebrow">${lane.laps.length}/${totalLaps}</span>
               ${lane.finished ? '' : `<span class="status-pill ${state}">${stateLabel}</span>`}
