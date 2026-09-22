@@ -50,7 +50,9 @@
       color-scheme:light;
     }
     *{box-sizing:border-box}
+    *{-webkit-tap-highlight-color:transparent}
     html,body{height:100%}
+    button{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
     body{
       margin:0;color:var(--text);font:15px/1.5 var(--font-body);
       background:
@@ -185,7 +187,8 @@
 
     .lane-card{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--line);padding:14px;
       background:radial-gradient(120% 140% at 50% -10%, var(--counter-grad-a) 0%, var(--counter-grad-b) 65%);
-      transition:border-color .15s ease,box-shadow .15s ease}
+      transition:border-color .15s ease,box-shadow .15s ease;
+      touch-action:manipulation;-webkit-touch-callout:none}
     .lane-card::before{content:"";position:absolute;inset:0;pointer-events:none;
       background:repeating-linear-gradient(180deg, rgba(127,127,127,.025) 0 2px, transparent 2px 4px)}
     .lane-card.running{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
