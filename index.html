@@ -191,11 +191,11 @@
       touch-action:manipulation;-webkit-touch-callout:none}
     .lane-card::before{content:"";position:absolute;inset:0;pointer-events:none;
       background:repeating-linear-gradient(180deg, rgba(127,127,127,.025) 0 2px, transparent 2px 4px)}
-    .lane-card.running{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+    .lane-card.running{border-color:var(--lap-color, var(--accent));box-shadow:0 0 0 3px var(--lap-color-dim, var(--accent-dim))}
     .lane-card.last-lap{border-color:var(--bad);box-shadow:0 0 0 3px var(--bad-dim)}
     .lane-card.finished{border-color:var(--good);box-shadow:0 0 0 3px var(--good-dim)}
     @keyframes flashGlow{
-      0%{box-shadow:0 0 0 0 var(--accent-dim)}
+      0%{box-shadow:0 0 0 0 var(--lap-color-dim, var(--accent-dim))}
       60%{box-shadow:0 0 0 8px transparent}
       100%{box-shadow:none}
     }
@@ -206,7 +206,7 @@
       border-radius:12px;border:2px solid var(--line);background:var(--bg-2);color:var(--text)}
     .bib-input::placeholder{color:var(--muted);opacity:.45}
     .bib-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
-    .lane-card.running .bib-input{border-color:var(--accent);background:var(--accent-dim)}
+    .lane-card.running .bib-input{border-color:var(--lap-color, var(--accent));background:var(--lap-color-dim, var(--accent-dim))}
     .lane-card.last-lap .bib-input{border-color:var(--bad);background:var(--bad-dim)}
     .lane-card.finished .bib-input{border-color:var(--good);background:var(--good-dim)}
 
@@ -214,7 +214,7 @@
     .eyebrow{font-family:var(--font-display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
     .status-pill{font-family:var(--font-display);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
       padding:3px 8px;border-radius:999px;color:var(--muted);background:var(--bg-2)}
-    .status-pill.running{color:var(--accent);background:var(--accent-dim)}
+    .status-pill.running{color:var(--lap-color, var(--accent));background:var(--lap-color-dim, var(--accent-dim))}
     .status-pill.last-lap{color:var(--bad);background:var(--bad-dim)}
     .status-pill.finished{color:var(--good);background:var(--good-dim)}
 
@@ -244,7 +244,7 @@
     .ctrl-card:active{transform:scale(.97)}
     .ctrl-bib{position:relative;font-family:var(--font-digits);font-size:clamp(34px,11vw,50px);line-height:1;color:var(--text)}
     .ctrl-laps{position:relative;font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--muted);margin-top:6px}
-    .ctrl-laps b{color:var(--accent);font-size:19px;font-weight:700}
+    .ctrl-laps b{color:var(--lap-color, var(--accent));font-size:19px;font-weight:700}
     .lane-card.finished .ctrl-laps b{color:var(--good)}
     .lane-card.last-lap .ctrl-laps b{color:var(--bad)}
 
@@ -1142,6 +1142,14 @@
 
       const lanes = Array.from({length:10}, (_, i) => ({ athlete:'', bib:String(i+1), laps:[], finished:false }));
 
+      // Цвет карточки меняется с каждым засчитанным кругом — так виден каждый новый тап.
+      // Красный (последний круг) и зелёный (финиш) не участвуют в чередовании — это отдельные статусы.
+      const LAP_COLORS = [
+        { color:'var(--accent)', dim:'var(--accent-dim)' },
+        { color:'#38bdf8', dim:'rgba(56,189,248,.28)' },
+        { color:'#a78bfa', dim:'rgba(167,139,250,.28)' }
+      ];
+
       const SAVED_RUNS_KEY = 'savedRunsV1';
       let savedRuns = loadArr(SAVED_RUNS_KEY);
 
@@ -1218,6 +1226,12 @@
           const card = document.createElement('div');
           card.addEventListener('click', () => markLap(index));
           shown++;
+
+          if (state === 'running') {
+            const lapColor = LAP_COLORS[(lane.laps.length - 1) % LAP_COLORS.length];
+            card.style.setProperty('--lap-color', lapColor.color);
+            card.style.setProperty('--lap-color-dim', lapColor.dim);
+          }
 
           if (viewMode === 'control') {
             card.className = cls + ' ctrl-card';
