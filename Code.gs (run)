@@ -1,10 +1,29 @@
+// Единая точка входа для старых URL отжиманий и длинного бега.
 function doPost(e) {
+  try {
+    var params = gtoRequest_(e);
+    var denied = gtoGuard_(params);
+    if (denied) return denied;
+    if (Array.isArray(params.entries)) {
+      if (!params.entries.length || params.entries.some(function(r) { return !r || !String(r.bib || '').trim() || r.total == null || !String(r.total).trim(); })) {
+        return gtoJson_({ok:false,error:'Некорректные результаты забега'});
+      }
+      var lock = LockService.getScriptLock(); lock.waitLock(10000);
+      try { return handleLongRun_(e, params); } finally { lock.releaseLock(); }
+    }
+    var lock = LockService.getScriptLock(); lock.waitLock(10000);
+    try { return handlePushup_(e); } finally { lock.releaseLock(); }
+  } catch(err) { return gtoJson_({ok:false,error:String(err)}); }
+}
+
+function handleLongRun_(e, data) {
   const sheet = SpreadsheetApp
     .openById('1SnOqMLc6Dw7BGqdXOwHOFDNi2lnJAytYfdTWcqR7gpk')
-    .getSheetByName('Длинная'); // важно: имя листа должно совпадать!
+    .getSheetByName('длинная'); // важно: имя листа должно совпадать!
 
-  const data = JSON.parse(e.postData.contents);
 
+
+  if (!sheet) throw new Error('Лист не найден: длинная');
   data.entries.forEach(row => {
     const bib = row.bib;
     const result = row.total;
@@ -19,7 +38,7 @@ function doPost(e) {
     }
   });
 
-  return ContentService.createTextOutput('OK').setMimeType(ContentService.MimeType.TEXT);
+  return gtoJson_({ok:true});
 }
 
 
@@ -52,6 +71,7 @@ function sbrosTolkoRuchnyhDannih() {
 
   SpreadsheetApp.getUi().alert("Сброшены только введённые вручную данные. Формулы сохранены.");
 }
+
 
 
 

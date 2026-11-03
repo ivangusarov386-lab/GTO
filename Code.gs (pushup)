@@ -1,18 +1,19 @@
+// В проекте «Длинная» установить вместе с Code.gs (run) и JudgeAuth.gs.
 // === Настройки ===
-const SPREADSHEET_ID = '1SnOqMLc6Dw7BGqdXOwHOFDNi2lnJAytYfdTWcqR7gpk';
-const SHEET_NAME = 'отжимание';
-const SHARED_SECRET = 'push123';
+const PUSHUP_SPREADSHEET_ID = '1SnOqMLc6Dw7BGqdXOwHOFDNi2lnJAytYfdTWcqR7gpk';
+const PUSHUP_SHEET_NAME = 'отжимание';
+const PUSHUP_SHARED_SECRET = 'push123';
 
 // === Основная функция ===
-function doPost(e) {
+function handlePushup_(e) {
   try {
     if (!e || !e.parameter) throw new Error('Нет данных в запросе');
-    const data = e.parameter;
+    const data = gtoRequest_(e);
     const participant = String(data.participant || '').trim();
     const result = String(data.result || '').trim();
     const token = String(data.token || '').trim();
 
-    if (token !== SHARED_SECRET) {
+    if (token !== PUSHUP_SHARED_SECRET) {
       return ContentService.createTextOutput(
         JSON.stringify({ ok: false, error: 'forbidden' })
       ).setMimeType(ContentService.MimeType.JSON);
@@ -24,9 +25,9 @@ function doPost(e) {
       ).setMimeType(ContentService.MimeType.JSON);
     }
 
-    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-    const sh = ss.getSheetByName(SHEET_NAME);
-    if (!sh) throw new Error('Лист не найден: ' + SHEET_NAME);
+    const ss = SpreadsheetApp.openById(PUSHUP_SPREADSHEET_ID);
+    const sh = ss.getSheetByName(PUSHUP_SHEET_NAME);
+    if (!sh) throw new Error('Лист не найден: ' + PUSHUP_SHEET_NAME);
 
     // === Ищем участника ===
     const values = sh.getDataRange().getValues();
@@ -56,3 +57,4 @@ function doPost(e) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
 }
+

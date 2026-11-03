@@ -17,7 +17,9 @@ const SHEET_MAP = {
 
 function doPost(e) {
   try {
-    const params = e.parameter;
+    const params = gtoRequest_(e);
+    const denied = gtoGuard_(params);
+    if (denied) return denied;
 
     if (params.token !== TOKEN) {
       return respond('error', 'Неверный токен');
@@ -74,6 +76,7 @@ function respond(status, message) {
     .createTextOutput(JSON.stringify({ status: status, message: message }))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
 
 
 
