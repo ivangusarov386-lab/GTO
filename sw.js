@@ -1,11 +1,12 @@
-// Service worker: офлайн-кэш для «Приём нормативов». Судьи часто работают
-// на стадионе/в зале со слабым интернетом — сайт должен открываться и без сети.
-const CACHE_NAME = 'gto-cache-v4';
+// Service worker: кэш оболочки «Приём нормативов».
+// Открытие оболочки без сети не даёт доступ к работе: требуется проверка сеанса.
+const CACHE_NAME = 'gto-cache-v5';
 
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
+  './judge-access.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/maskable-192.png',
@@ -34,6 +35,8 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   // Не трогаем запросы к вебхукам (POST в Google Apps Script) — их кэшировать нельзя и не нужно.
   if (req.method !== 'GET') return;
+  // Ответы авторизации никогда не кэшируем.
+  if (new URL(req.url).hostname.endsWith('google.com') || new URL(req.url).hostname.endsWith('googleusercontent.com')) return;
 
   // Сама страница: сначала сеть (чтобы судьи сразу видели новую версию),
   // при отсутствии сети — отдаём последнюю закэшированную копию.
