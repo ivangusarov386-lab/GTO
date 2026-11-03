@@ -1,0 +1,58 @@
+// === Настройки ===
+const SPREADSHEET_ID = '1SnOqMLc6Dw7BGqdXOwHOFDNi2lnJAytYfdTWcqR7gpk';
+const SHEET_NAME = 'отжимание';
+const SHARED_SECRET = 'push123';
+
+// === Основная функция ===
+function doPost(e) {
+  try {
+    if (!e || !e.parameter) throw new Error('Нет данных в запросе');
+    const data = e.parameter;
+    const participant = String(data.participant || '').trim();
+    const result = String(data.result || '').trim();
+    const token = String(data.token || '').trim();
+
+    if (token !== SHARED_SECRET) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: 'forbidden' })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (!participant) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ ok: false, error: 'missing participant' })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sh = ss.getSheetByName(SHEET_NAME);
+    if (!sh) throw new Error('Лист не найден: ' + SHEET_NAME);
+
+    // === Ищем участника ===
+    const values = sh.getDataRange().getValues();
+    let updated = false;
+
+    for (let i = 1; i < values.length; i++) {
+      if (String(values[i][0]).trim().toLowerCase() === participant.toLowerCase()) {
+        sh.getRange(i + 1, 2).setValue(result); // обновляем результат
+        sh.getRange(i + 1, 3).setValue(new Date()); // обновляем дату
+        updated = true;
+        break;
+      }
+    }
+
+    // === Если участник не найден — добавляем новую строку ===
+    if (!updated) {
+      sh.appendRow([participant, result, new Date()]);
+    }
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: true, message: updated ? 'updated' : 'added' })
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ ok: false, error: String(err) })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
