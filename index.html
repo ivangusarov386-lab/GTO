@@ -319,6 +319,19 @@
     .toast.success{border-color:var(--good);color:var(--good)}
     .toast.error{border-color:var(--bad);color:var(--bad)}
 
+    .sheet-notice,.sheet-error{width:min(calc(100% - 32px),480px);padding:clamp(20px,5vw,32px);
+      border:2px solid var(--good);border-radius:18px;background:var(--bg-1);color:var(--text);
+      box-shadow:0 16px 40px var(--shadow-color-soft);text-align:center;overflow-wrap:anywhere}
+    .sheet-notice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:100;pointer-events:none}
+    .sheet-notice:empty{display:none}
+    .sheet-notice strong,.sheet-error h2{display:block;font-size:clamp(22px,5vw,28px);line-height:1.2;margin:0 0 12px}
+    .sheet-error{border-color:var(--bad);max-height:calc(100dvh - 32px);overflow:auto}
+    .sheet-error::backdrop{background:var(--backdrop)}
+    .sheet-error ul{padding:0;list-style:none}
+    .sheet-error li + li{margin-top:8px}
+    .sheet-error button{display:block;width:100%;min-height:48px;padding:10px;border-radius:10px;
+      border:1px solid var(--line);background:var(--bg-2);color:var(--text);font:inherit;cursor:pointer}
+
     .conn-dot{width:9px;height:9px;border-radius:50%;background:#8b96a5;flex:none;transition:.2s;margin-left:auto}
     .conn-dot.ok{background:var(--good);box-shadow:0 0 8px var(--good)}
     .conn-dot.err{background:var(--bad);box-shadow:0 0 8px var(--bad)}
@@ -375,6 +388,12 @@
       <p id="judgeLoginMessage" role="status" aria-live="polite">Для работы требуется интернет.</p>
     </form>
   </div>
+  <dialog class="sheet-error" id="sheetError" aria-labelledby="sheetErrorTitle" aria-describedby="sheetErrorDetails sheetErrorHint">
+    <h2 id="sheetErrorTitle">Запись в таблицу не подтверждена</h2>
+    <ul id="sheetErrorDetails"></ul>
+    <p id="sheetErrorHint">Результаты сохранены на устройстве. Их можно выгрузить в Excel.</p>
+    <form method="dialog"><button autofocus>Понятно</button></form>
+  </dialog>
   <div id="judgeApp" inert>
   <div id="introOverlay" class="intro-overlay">
     <video id="introVideo" class="intro-video" autoplay muted playsinline webkit-playsinline preload="auto">
@@ -433,6 +452,7 @@
   </div>
 
   <div class="toast-container" id="toastContainer"></div>
+  <div class="sheet-notice" id="sheetNotice" role="status" aria-atomic="true"></div>
 
   <div class="drawer-backdrop" id="drawerBackdrop"></div>
   <nav class="drawer" id="drawer">
@@ -569,6 +589,33 @@
       connDot.classList.add(ok ? 'ok' : 'err');
     }
 
+    const sheetNotice = document.getElementById('sheetNotice');
+    const sheetError = document.getElementById('sheetError');
+    const sheetErrorDetails = document.getElementById('sheetErrorDetails');
+    let sheetNoticeTimer;
+    function showSheetResult(results){
+      const failed = results.filter(result => !result.ok);
+      setConnStatus(failed.length === 0);
+      if (failed.length) {
+        clearTimeout(sheetNoticeTimer);
+        sheetNotice.replaceChildren();
+        if (!sheetError.open) sheetErrorDetails.replaceChildren();
+        for (const result of failed) {
+          const item = document.createElement('li');
+          item.textContent = result.msg;
+          sheetErrorDetails.appendChild(item);
+        }
+        if (!sheetError.open) sheetError.showModal();
+        return;
+      }
+      if (sheetError.open) return;
+      clearTimeout(sheetNoticeTimer);
+      const title = document.createElement('strong');
+      title.textContent = 'Сохранено в таблицу';
+      sheetNotice.replaceChildren(title, results.map(result => result.msg).join(' · '));
+      sheetNoticeTimer = setTimeout(() => sheetNotice.replaceChildren(), 3200);
+    }
+
     // подсвечивает поле красным, если оно пустое, зелёным — если заполнено
     function markFieldState(el){
       const filled = (el.value||'').trim() !== '';
@@ -594,7 +641,7 @@
 
     async function doSend(cfg, participant, result){
       if (!cfg.webhookUrl || cfg.webhookUrl.indexOf('ВСТАВЬТЕ') === 0) {
-        return { ok:false, msg: 'URL вебхука не указан в коде сайта' };
+        return { ok:false, msg: `№${participant}: адрес таблицы не настроен` };
       }
       try {
         const payload = { participant, result, token: cfg.token };
@@ -607,13 +654,7 @@
     }
 
     async function sendResult(cfg, participant, result){
-      const r = await doSend(cfg, participant, result);
-      setConnStatus(r.ok);
-      if (r.ok) {
-        showToast('✅ Сохранено: ' + r.msg, 'success');
-      } else {
-        showToast('⚠ ' + r.msg, 'error');
-      }
+      showSheetResult([await doSend(cfg, participant, result)]);
     }
 
     function exportToExcel(results, filename){
@@ -1029,19 +1070,11 @@
         saveArr(STORAGE_KEY, results);
         renderTable();
 
-        const [r1, r2] = await Promise.all([
+        const sent = await Promise.all([
           doSend(cfg, participant1, result1),
           doSend(cfg, participant2, result2)
         ]);
-        setConnStatus(r1.ok && r2.ok);
-        if (r1.ok && r2.ok) {
-          showToast(`✅ Сохранено: ${r1.msg} · ${r2.msg}`, 'success');
-        } else {
-          const parts = [];
-          if (!r1.ok) parts.push(r1.msg);
-          if (!r2.ok) parts.push(r2.msg);
-          showToast('⚠ ' + parts.join(' · '), 'error');
-        }
+        showSheetResult(sent);
 
         resetSlots();
         p1.focus();
@@ -1403,10 +1436,9 @@
           };
           if (!payload.entries.length) return;
           await JudgeAccess.send(cfg.webhookUrl, payload);
-          setConnStatus(true);
+          showSheetResult([{ok: true, msg: `Забег «${run.name}»`}]);
         }catch(err){
-          setConnStatus(false);
-          showToast('В таблицу не отправлено: ' + err.message + '. Забег сохранён на устройстве.', 'error');
+          showSheetResult([{ok: false, msg: `Забег «${run.name}»: ${err.message}`}]);
         }
       }
 
@@ -1441,9 +1473,10 @@
         savedRuns.push(run);
         saveArr(SAVED_RUNS_KEY, savedRuns);
         renderSavedRuns();
-        showToast(`Забег «${name}» сохранён`, 'success');
         if (sendToGoogle) {
           sendToGoogleSheet(run);
+        } else {
+          showToast(`Забег «${name}» сохранён на устройстве`, 'success');
         }
       }
 
