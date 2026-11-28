@@ -326,3 +326,28 @@ html[data-theme="light"] {background:#eeeee8}
   #judgeLoginForm .keyboard-toggle {margin-top:4px}
   #judgeLoginMessage {min-height:32px;margin-top:8px}
 }
+
+
+/* Subtle completion cues for participant numbers and results. */
+:root {
+  --field-empty-border:rgba(255,142,155,.4);
+  --field-empty-tint:rgba(255,142,155,.055);
+  --field-filled-border:rgba(146,223,174,.4);
+  --field-filled-tint:rgba(146,223,174,.055);
+}
+:root[data-theme="light"] {
+  --field-empty-border:rgba(182,44,67,.35);
+  --field-empty-tint:rgba(182,44,67,.035);
+  --field-filled-border:rgba(36,115,70,.35);
+  --field-filled-tint:rgba(36,115,70,.035);
+}
+#sections input.field-empty {
+  border-color:var(--field-empty-border);
+  background-image:linear-gradient(var(--field-empty-tint),var(--field-empty-tint));
+}
+#sections input.field-filled {
+  border-color:var(--field-filled-border);
+  background-image:linear-gradient(var(--field-filled-tint),var(--field-filled-tint));
+}
+#sections input.field-empty:focus {box-shadow:0 0 0 2px var(--field-empty-tint)}
+#sections input.field-filled:focus {box-shadow:0 0 0 2px var(--field-filled-tint)}

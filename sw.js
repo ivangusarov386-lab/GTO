@@ -1,6 +1,6 @@
 // Service worker: кэш оболочки «Приём нормативов».
 // Открытие оболочки без сети не даёт доступ к работе: требуется проверка сеанса.
-const CACHE_NAME = 'gto-cache-v11';
+const CACHE_NAME = 'gto-cache-v12';
 
 const APP_SHELL = [
   './',

@@ -295,7 +295,7 @@
     input[type="text"],input[type="number"]{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);
       background:var(--bg-2);color:var(--text);font-family:var(--font-body);font-weight:500;font-size:15px;transition:.15s}
     input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
-    input.invalid,.value-input.invalid{border-color:var(--bad) !important;box-shadow:0 0 0 3px var(--bad-dim) !important}
+    input.invalid,.value-input.invalid{border-color:var(--field-empty-border, var(--bad)) !important;box-shadow:0 0 0 2px var(--field-empty-tint, var(--bad-dim)) !important}
     input.valid,.value-input.valid{border-color:var(--good) !important;box-shadow:0 0 0 3px var(--good-dim) !important}
     .hint{font-size:12px;color:var(--muted);margin-top:8px}
 
@@ -629,15 +629,19 @@
       sheetNoticeTimer = setTimeout(() => sheetNotice.replaceChildren(), 3200);
     }
 
-    // Сбрасываем ошибку, когда судья исправляет поле.
+    // Мягкая подсветка заполненности отличается от ошибки при сохранении.
     function markFieldState(el){
+      const filled = el.value.trim() !== '';
+      el.classList.toggle('field-filled', filled);
+      el.classList.toggle('field-empty', !filled);
       el.classList.remove('valid', 'invalid');
       el.removeAttribute('aria-invalid');
     }
-    // Новые и очищенные поля остаются нейтральными.
+    // Обновляем подсветку после ввода, сброса и изменений счётчика.
     function watchField(el){
       markFieldState(el);
       el.addEventListener('input', () => markFieldState(el));
+      el.addEventListener('change', () => markFieldState(el));
     }
 
     // проверяет поля перед сохранением; возвращает true, если всё заполнено
