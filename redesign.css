@@ -236,15 +236,18 @@ tbody tr:nth-child(even) {background:var(--bg-2)}
 html[data-theme="light"] {background:#eeeee8}
 #mainPanel {scroll-margin-top:24px}
 
-/* The sign-in screen uses a compact, neutral keypad independently of the app theme. */
+/* Center the compact keypad over the athletics photograph. */
 #judgeLogin {
   --pin-size:78px;
-  padding:calc(44px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px))
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px))
     calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));
-  background:#fff;color:#171717;color-scheme:light;overflow:auto;
-  display:grid;place-items:center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#101112;color:#f1f2e9;color-scheme:dark;overflow:auto;isolation:isolate;
+  display:grid;place-items:center;align-items:safe center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-#judgeLogin::before {display:none}
+#judgeLogin::before {
+  content:"";display:block;position:fixed;inset:0;z-index:-1;
+  background:linear-gradient(rgba(12,13,14,.72),rgba(12,13,14,.82)),url('icons/track-editorial.webp') center/cover no-repeat;
+}
 #judgeLoginForm {
   width:min(100%,332px);padding:0;margin:0;border:0;background:transparent;color:inherit;
   font:inherit;box-shadow:none;text-align:center;
@@ -252,7 +255,7 @@ html[data-theme="light"] {background:#eeeee8}
 #judgeLoginForm::before {display:none}
 #judgeLoginForm h1 {
   font:600 24px/1.3 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  letter-spacing:-.035em;text-transform:none;color:#171717;margin:0 0 20px;
+  letter-spacing:-.035em;text-transform:none;color:#f1f2e9;margin:0 0 20px;
 }
 .pin-controls {border:0;padding:0;margin:0;min-width:0}
 .pin-label {
@@ -260,15 +263,15 @@ html[data-theme="light"] {background:#eeeee8}
   clip-path:inset(50%);white-space:nowrap;border:0;
 }
 .pin-entry {position:relative;min-height:44px;margin:0 0 36px;border-radius:10px}
-.pin-entry:focus-within {outline:2px solid #595959;outline-offset:5px}
+.pin-entry:focus-within {outline:2px solid #ddd;outline-offset:5px}
 .pin-indicators {display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;min-height:44px;padding:10px 12px}
-.pin-dot {width:10px;height:10px;flex:none;border-radius:50%;background:#222;animation:pinDotIn .14s ease-out}
+.pin-dot {width:10px;height:10px;flex:none;border-radius:50%;background:#f1f2e9;animation:pinDotIn .14s ease-out}
 #judgeLoginForm #judgePassword {
   position:absolute;inset:0;width:100%;height:100%;min-height:44px;padding:8px 12px;margin:0;
   opacity:0;border:0;border-radius:10px;font:24px/1.2 system-ui,sans-serif;
   letter-spacing:.15em;text-align:center;box-shadow:none;
 }
-#judgeLoginForm.use-keyboard #judgePassword {opacity:1;background:#f3f3f3;color:#171717}
+#judgeLoginForm.use-keyboard #judgePassword {opacity:1;background:#252729;color:#f1f2e9}
 .use-keyboard .pin-indicators {visibility:hidden}
 .pin-keypad {
   display:grid;grid-template-columns:repeat(3,var(--pin-size));justify-content:space-between;
@@ -282,27 +285,26 @@ html[data-theme="light"] {background:#eeeee8}
 }
 #judgeLoginForm .pin-key:hover {background:#e6e6e6}
 #judgeLoginForm .pin-key:active {transform:scale(.93);background:#dcdcdc}
-#judgeLoginForm .pin-key-secondary {background:transparent;font-size:12px;font-weight:500;color:#555}
-#judgeLoginForm .pin-key-secondary:hover {background:#f2f2f2;color:#171717}
+#judgeLoginForm .pin-key-secondary {background:transparent;font-size:12px;font-weight:500;color:#e2e2df}
+#judgeLoginForm .pin-key-secondary:hover {background:rgba(255,255,255,.12);color:#fff}
 #judgeLoginForm .pin-submit {
   display:flex;justify-content:center;gap:10px;min-height:48px;width:100%;margin:0;padding:12px 20px;
-  border:0;border-radius:100px;background:#222;color:#fff;font:500 14px/1.5 system-ui,sans-serif;
+  border:0;border-radius:100px;background:#e5a06f;color:#28190e;font:500 14px/1.5 system-ui,sans-serif;
 }
-#judgeLoginForm .pin-submit:hover {background:#3b3b3b}
+#judgeLoginForm .pin-submit:hover {background:#efb88f}
 #judgeLoginForm .keyboard-toggle {
   min-height:44px;width:100%;display:block;margin:10px 0 0;padding:10px 4px;
-  border:0;background:transparent;color:#666;border-radius:8px;font:400 12px/1.5 system-ui,sans-serif;
+  border:0;background:transparent;color:#d1d1ce;border-radius:8px;font:400 12px/1.5 system-ui,sans-serif;
 }
-#judgeLoginForm .keyboard-toggle:hover {color:#171717;background:#f5f5f5}
-#judgeLoginForm button:focus-visible {outline:2px solid #444;outline-offset:4px}
+#judgeLoginForm .keyboard-toggle:hover {color:#fff;background:rgba(255,255,255,.1)}
+#judgeLoginForm button:focus-visible {outline:2px solid #fff;outline-offset:4px}
 #judgeLoginForm button:disabled {opacity:.45;cursor:wait}
 #judgeLoginMessage {
-  min-height:40px;margin:14px 0 0;font:400 12px/1.6 system-ui,sans-serif;color:#666;
+  min-height:40px;margin:14px 0 0;font:400 12px/1.6 system-ui,sans-serif;color:#d1d1ce;
   overflow-wrap:anywhere;
 }
 @keyframes pinDotIn {from {transform:scale(.65);opacity:.5}to {transform:scale(1);opacity:1}}
 @media(max-width:600px) {
-  #judgeLogin {place-items:start center;padding-top:max(56px,env(safe-area-inset-top,0px))}
   #judgeLoginForm {width:min(100%,312px)}
   #judgeLoginForm h1 {font-size:22px}
 }
