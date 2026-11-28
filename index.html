@@ -533,11 +533,11 @@
       { id:'jump',     label:'Прыжки',       icon:ICONS.jump,     kind:'counter', webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'jump' },
       { id:'situp',    label:'Пресс',        icon:ICONS.situp,    kind:'counter', webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'situp' },
       { id:'bend',     label:'Наклон',       icon:ICONS.bend,     kind:'manual',  webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'bend',     unit:'см',     step:1 },
-      { id:'shuttle',  label:'Челнок 3х10',  icon:ICONS.shuttle,  kind:'timed',   webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'shuttle',  unit:'сек',    step:0.01 },
-      { id:'run30',    label:'30 метров',    icon:ICONS.run,      kind:'timed',   webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'run30',    unit:'сек',    step:0.01 },
+      { id:'shuttle',  label:'Челнок 3х10',  icon:ICONS.shuttle,  kind:'timed',   webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'shuttle',  unit:'сек',    step:0.1 },
+      { id:'run30',    label:'30 метров',    icon:ICONS.run,      kind:'timed',   webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'run30',    unit:'сек',    step:0.1 },
       { id:'throw',    label:'Метание',      icon:ICONS.throw,    kind:'manual',  webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'throw',    unit:'м',      step:0.1 },
       { id:'shooting', label:'Стрельба',     icon:ICONS.shooting, kind:'manual',  webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'shooting', unit:'очков', step:1 },
-      { id:'run60',    label:'60м',          icon:ICONS.run,      kind:'timed',   webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'run60',    unit:'сек',    step:0.01 },
+      { id:'run60',    label:'60м',          icon:ICONS.run,      kind:'timed',   webhookUrl: NEW_WEBHOOK_URL,     token: NEW_WEBHOOK_TOKEN, sheetType: 'run60',    unit:'сек',    step:0.1 },
       { id:'longdist', label:'Длинная',      icon:ICONS.laps,     kind:'laps',    webhookUrl: LONGDIST_WEBHOOK_URL },
     ];
 
@@ -920,6 +920,8 @@
     // ---------- шаблон: секундомер для двух участников сразу (челнок/30м/60м) ----------
     function timedTemplate(cfg){
       const id = cfg.id;
+      const tenths = cfg.step === 0.1;
+      const zero = tenths ? '0,0' : '0.00';
       const card = n => `
         <div class="dual-card">
           <h3>Участник ${n}</h3>
@@ -928,7 +930,7 @@
           <label for="${id}-digits${n}" style="margin-top:12px">Результат${cfg.unit ? ' (' + cfg.unit + ')' : ''}</label>
           <div class="value-row" data-nocount>
             <button id="${id}-minus${n}" class="adjust-btn" type="button">−</button>
-            <input id="${id}-digits${n}" class="value-input" type="number" step="${cfg.step || 0.01}" placeholder="0.00">
+            <input id="${id}-digits${n}" class="value-input" ${tenths ? 'type="text" inputmode="decimal"' : 'type="number" step="0.01"'} placeholder="${zero}">
             <button id="${id}-plus${n}" class="adjust-btn" type="button">+</button>
           </div>
           <button id="${id}-save${n}" class="save-solo" data-nocount>Сохранить участника ${n}</button>
@@ -937,7 +939,7 @@
       return `
         <div class="counter timed-clock">
           <div class="eyebrow">Общий секундомер</div>
-          <div id="${id}-masterDigits" class="digits">0.00</div>
+          <div id="${id}-masterDigits" class="digits">${zero}</div>
         </div>
         <div class="controls" data-nocount>
           <button id="${id}-start" class="primary">Старт</button>
@@ -977,6 +979,8 @@
 
       const STORAGE_KEY = 'normativy_' + id + '_v1';
       const step = cfg.step || 0.01;
+      const tenths = step === 0.1;
+      const zero = masterDigits.textContent;
       let running = false, elapsedMs = 0, timerHandle = null, lastTick = null;
       let frozen1 = false, frozen2 = false;
 
@@ -985,11 +989,24 @@
       function getResults(){ return loadArr(STORAGE_KEY); }
       function renderTable(){ tableBody.innerHTML = tableRowsHtml(getResults()); }
 
+      function clockResult(){
+        if (!tenths) return (elapsedMs / 1000).toFixed(2);
+        return (Math.floor(elapsedMs / 100) / 10).toFixed(1).replace('.', ',');
+      }
+
+      function enteredResult(input){
+        const value = input.value.trim();
+        if (!tenths) return value;
+        const parts = value.match(/^(\d*)(?:[.,](\d+))?$/);
+        if (!parts || !(parts[1] || parts[2])) return '';
+        return `${(parts[1] || '0').replace(/^0+(?=\d)/, '')},${parts[2]?.[0] || '0'}`;
+      }
+
       function tick(){
         const now = Date.now();
         elapsedMs += now - lastTick;
         lastTick = now;
-        const secs = (elapsedMs/1000).toFixed(2);
+        const secs = clockResult();
         masterDigits.textContent = secs;
         if (!frozen1) { d1.value = secs; markFieldState(d1); }
         if (!frozen2) { d2.value = secs; markFieldState(d2); }
@@ -999,7 +1016,7 @@
         running = false;
         if (timerHandle) { clearInterval(timerHandle); timerHandle = null; }
         elapsedMs = 0; frozen1 = false; frozen2 = false;
-        masterDigits.textContent = '0.00';
+        masterDigits.textContent = zero;
         p1.value=''; p2.value=''; d1.value=''; d2.value='';
         [p1,p2,d1,d2].forEach(markFieldState);
         startBtn.disabled = false; stopBtn.disabled = true;
@@ -1008,7 +1025,7 @@
 
       startBtn.addEventListener('click', ()=>{
         elapsedMs = 0; frozen1 = false; frozen2 = false;
-        d1.value = ''; d2.value = ''; masterDigits.textContent = '0.00';
+        d1.value = ''; d2.value = ''; masterDigits.textContent = zero;
         markFieldState(d1); markFieldState(d2);
         running = true;
         startBtn.disabled = true; stopBtn.disabled = false;
@@ -1021,11 +1038,12 @@
         const now = Date.now();
         elapsedMs += now - lastTick;
         lastTick = now;
-        const secs = (elapsedMs/1000).toFixed(2);
+        const secs = clockResult();
         beep(); buzz();
         if (!frozen1) { d1.value = secs; frozen1 = true; markFieldState(d1); }
         else if (!frozen2) { d2.value = secs; frozen2 = true; markFieldState(d2); }
         if (frozen1 && frozen2) {
+          masterDigits.textContent = secs;
           running = false;
           clearInterval(timerHandle); timerHandle = null;
           startBtn.disabled = false; stopBtn.disabled = true;
@@ -1035,8 +1053,10 @@
       resetBtn.addEventListener('click', doReset);
 
       function nudge(input, delta){
-        const cur = parseFloat(input.value) || 0;
-        input.value = Math.max(0, Math.round((cur+delta)*100)/100).toFixed(2);
+        const cur = Number(enteredResult(input).replace(',', '.')) || 0;
+        const scale = tenths ? 10 : 100;
+        const next = Math.max(0, Math.round(cur * scale + delta * scale) / scale);
+        input.value = tenths ? next.toFixed(1).replace('.', ',') : next.toFixed(2);
         markFieldState(input);
       }
       plus1.addEventListener('click', ()=>nudge(d1, step));
@@ -1047,7 +1067,8 @@
       async function saveOne(participantInput, digitsInput){
         if (!validateFields([participantInput, digitsInput])) return;
         const participant = (participantInput.value||'').trim();
-        const result = (digitsInput.value||'').trim();
+        const result = enteredResult(digitsInput);
+        if (!result) return showToast('Введите время в секундах', 'error');
         const results = getResults();
         results.push({participant, result});
         saveArr(STORAGE_KEY, results);
@@ -1061,8 +1082,9 @@
 
       saveBtn.addEventListener('click', async ()=>{
         if (!validateFields([p1, d1, p2, d2])) return;
-        const participant1 = (p1.value||'').trim(), result1 = (d1.value||'').trim();
-        const participant2 = (p2.value||'').trim(), result2 = (d2.value||'').trim();
+        const participant1 = p1.value.trim(), result1 = enteredResult(d1);
+        const participant2 = p2.value.trim(), result2 = enteredResult(d2);
+        if (!result1 || !result2) return showToast('Введите время в секундах', 'error');
 
         const results = getResults();
         results.push({participant: participant1, result: result1});
