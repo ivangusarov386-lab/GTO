@@ -3,8 +3,8 @@ html,body {background:#101112}
 @font-face {font-family:Oswald;src:url('fonts/oswald.woff') format('woff');font-weight:200 700;font-display:swap}
 :root {
   --bg-0:#101112;--bg-1:#17191b;--bg-2:#202326;--line:#383d40;
-  --text:#f1f2e9;--muted:#a5abad;--accent:#d3f66a;--accent-ink:#162000;
-  --accent-dim:rgba(211,246,106,.12);--good:#92dfae;--bad:#ff8e9b;
+  --text:#f1f2e9;--muted:#a5abad;--accent:#e5a06f;--accent-ink:#28190e;
+  --accent-dim:rgba(229,160,111,.14);--good:#92dfae;--bad:#ff8e9b;
   --good-dim:rgba(146,223,174,.15);--bad-dim:rgba(255,142,155,.13);
   --shadow-color:rgba(0,0,0,.18);--shadow-color-soft:rgba(0,0,0,.2);
   --dashed-border:#51595d;--hover-border:#889296;--backdrop:rgba(0,0,0,.72);
@@ -12,15 +12,15 @@ html,body {background:#101112}
 }
 :root[data-theme="light"] {
   --bg-0:#eeeee8;--bg-1:#fafaf5;--bg-2:#e7e8e1;--line:#bfc4bb;
-  --text:#191c18;--muted:#5d665b;--accent:#d3f66a;--accent-ink:#162000;
-  --accent-dim:rgba(155,191,52,.15);--good:#247346;--bad:#b62c43;
+  --text:#191c18;--muted:#5d665b;--accent:#e5a06f;--accent-ink:#28190e;
+  --accent-dim:rgba(229,160,111,.16);--good:#247346;--bad:#b62c43;
   --good-dim:rgba(36,115,70,.12);--bad-dim:rgba(182,44,67,.12);
   --dashed-border:#929d8d;--hover-border:#65755d;
   --shadow-color:rgba(0,0,0,.06);--shadow-color-soft:rgba(0,0,0,.1);
 }
 html {scroll-behavior:smooth}
 body {background:var(--bg-0);font:14px/1.6 var(--font-body);-webkit-font-smoothing:antialiased}
-::selection {background:#d3f66a;color:#162000}
+::selection {background:#e5a06f;color:#28190e}
 button,input {font:inherit}
 button,input,a {touch-action:manipulation}
 button {transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
@@ -90,7 +90,7 @@ input:focus {border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
 .controls button,.save-solo,.btn {min-height:46px;border-radius:100px;padding:12px 18px;font:500 12px/1.5 var(--font-body);
   text-transform:none;letter-spacing:0;cursor:pointer}
 .controls button.primary,.save-solo {background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.controls button.primary:hover {filter:none;background:#e0ff8a;border-color:#e0ff8a}
+.controls button.primary:hover {filter:none;background:#efb88f;border-color:#efb88f}
 .controls button.warn {background:transparent;border-color:var(--line);color:var(--muted)}
 .controls button.warn:hover {background:var(--bad-dim);border-color:var(--bad);color:var(--bad)}
 .controls button:disabled {opacity:.4;cursor:not-allowed}
@@ -163,7 +163,7 @@ tbody tr:nth-child(even) {background:var(--bg-2)}
 #judgeLogin::before {content:"";position:absolute;inset:0 50% 0 0;background:linear-gradient(0deg,rgba(0,0,0,.35),transparent 70%),url('icons/track-editorial.webp') 68% center/cover}
 #judgeLoginForm {position:relative;width:min(100%,1100px);padding:64px 0 64px min(55vw,650px);border:0;border-radius:0;background:transparent;color:#f1f2e9}
 .login-brand {position:absolute;left:0;top:50px;font:500 40px/1 var(--font-digits);letter-spacing:-.03em}
-.login-brand span {color:#d3f66a}
+.login-brand span {color:#e5a06f}
 .login-eyebrow {position:absolute;left:0;top:105px;font-size:11px;color:#d2d5ce}
 #judgeLoginForm::before {content:"";position:absolute;left:0;top:150px;width:100px;height:1px;background:rgba(255,255,255,.4)}
 #judgeLoginForm h1 {font:500 clamp(44px,5vw,72px)/1 var(--font-digits);letter-spacing:-.03em;text-transform:uppercase;margin:0 0 24px;color:#f1f2e9}
@@ -171,8 +171,8 @@ tbody tr:nth-child(even) {background:var(--bg-2)}
 #judgeLoginForm label {color:#b2b8b9;font-size:12px}
 #judgeLoginForm input {min-height:56px;background:#202326;border:1px solid #42494c;border-radius:10px;color:#f1f2e9}
 #judgeLoginForm button {min-height:54px;border-radius:100px;padding:14px 20px;margin-top:16px;font-size:12px;font-weight:500;
-  background:#d3f66a;color:#162000;display:flex;align-items:center;justify-content:space-between;gap:16px}
-#judgeLoginForm button:hover {background:#e0ff8a}
+  background:#e5a06f;color:#28190e;display:flex;align-items:center;justify-content:space-between;gap:16px}
+#judgeLoginForm button:hover {background:#efb88f}
 #judgeLoginForm button:disabled {opacity:.65;cursor:wait}
 #judgeLoginMessage {font-size:12px;color:#a5abad;line-height:1.7;margin:20px 0 0;min-height:42px}
 /* Enter once, keep the working controls still. */
@@ -265,4 +265,35 @@ html[data-theme="light"] {background:#eeeee8}
   .login-eyebrow {top:55px;font-size:10px}
   #judgeLoginForm::before {display:none}
   #judgeLoginForm h1 {font-size:54px}
+}
+/* Large password keys work with the existing shared-password authentication. */
+#judgeLoginForm {padding-top:28px;padding-bottom:28px}
+#judgeLoginForm h1 {font-size:56px}
+.login-description {margin-bottom:22px}
+.pin-controls {border:0;padding:0;margin:0;min-width:0;max-width:340px}
+#judgeLoginForm #judgePassword {text-align:center;font-size:30px;letter-spacing:.2em;min-height:56px}
+.pin-keypad {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+#judgeLoginForm .pin-key {display:flex;justify-content:center;align-items:center;margin:0;padding:0;min-height:62px;
+  border:1px solid #42494c;border-radius:16px;background:#202326;color:#f1f2e9;font:400 28px var(--font-body)}
+#judgeLoginForm .pin-key:hover {background:#2f3335;border-color:#e5a06f}
+#judgeLoginForm .pin-key:active {background:rgba(229,160,111,.18)}
+#judgeLoginForm .pin-key-secondary {background:transparent;font-size:12px;color:#b2b8b9}
+#judgeLoginForm .pin-submit {min-height:52px;margin-top:0}
+#judgeLoginForm .keyboard-toggle {display:block;width:100%;min-height:44px;margin:8px 0 0;padding:8px;
+  background:transparent;color:#b2b8b9;font-size:11px;font-weight:400;border:0;border-radius:8px;text-align:center}
+#judgeLoginForm .keyboard-toggle:hover {color:#efb88f;background:#202326}
+.pin-controls:disabled {opacity:.65}
+#judgeLoginMessage {max-width:340px;margin-top:12px;min-height:38px}
+@media(max-width:760px) {
+  #judgeLogin {padding:24px}
+  #judgeLogin::before {height:104px;opacity:.45}
+  #judgeLoginForm {max-width:340px;padding:104px 0 0}
+  .login-brand {top:0;font-size:28px}
+  .login-eyebrow {top:39px;font-size:10px}
+  #judgeLoginForm h1 {font-size:36px;margin-bottom:12px}
+  .login-description {font-size:12px;line-height:1.6;margin-bottom:18px}
+  #judgeLoginForm .pin-key {min-height:54px;font-size:26px;border-radius:14px}
+  #judgeLoginForm .pin-key-secondary {font-size:12px}
+  .pin-keypad {gap:8px;margin:12px 0}
+  #judgeLoginForm #judgePassword {min-height:50px;font-size:28px}
 }

@@ -9,7 +9,33 @@
   const form = document.getElementById('judgeLoginForm');
   const password = document.getElementById('judgePassword');
   const message = document.getElementById('judgeLoginMessage');
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[type="submit"]');
+  const buttonLabel = button.querySelector('span');
+  const controls = form.querySelector('.pin-controls');
+  const keyboardToggle = document.getElementById('judgeKeyboardToggle');
+  form.querySelector('.pin-keypad').addEventListener('click', event => {
+    const key = event.target.closest('button');
+    if (!key || controls.disabled) return;
+    const start = password.selectionStart ?? password.value.length;
+    const end = password.selectionEnd ?? start;
+    if (key.dataset.key === 'clear') {
+      password.value = '';
+      password.setSelectionRange(0, 0);
+    } else if (key.dataset.key === 'backspace') {
+      password.setRangeText('', start === end ? Math.max(0, start - 1) : start, end, 'end');
+    } else {
+      password.setRangeText(key.dataset.digit, start, end, 'end');
+    }
+    password.dispatchEvent(new Event('input', {bubbles: true}));
+    password.focus({preventScroll: true});
+  });
+  keyboardToggle.addEventListener('click', () => {
+    const useKeyboard = password.inputMode === 'none';
+    password.inputMode = useKeyboard ? 'text' : 'none';
+    keyboardToggle.setAttribute('aria-pressed', String(useKeyboard));
+    keyboardToggle.textContent = useKeyboard ? 'Использовать кнопки на экране' : 'Ввести с клавиатуры';
+    password.focus({preventScroll: true});
+  });
   const app = document.getElementById('judgeApp');
   function lock(reason, clear = true) {
     generation++;
@@ -58,7 +84,9 @@
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!password.value) return;
-    button.disabled = true;
+    controls.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    buttonLabel.textContent = 'Проверяем…';
     message.textContent = 'Проверяем пароль…';
     const current = ++generation;
     try {
@@ -71,7 +99,11 @@
       unlock();
     } catch (_) {
       if (current === generation) message.textContent = 'Не удалось войти. Проверьте интернет и настройку вебхука.';
-    } finally { button.disabled = false; }
+    } finally {
+      controls.disabled = false;
+      buttonLabel.textContent = 'Войти';
+      form.removeAttribute('aria-busy');
+    }
   });
   window.JudgeAccess = {
     async send(url, payload) {

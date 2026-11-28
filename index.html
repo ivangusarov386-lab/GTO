@@ -385,9 +385,28 @@
       <div class="login-eyebrow">Школьный спортивный клуб · ГТО</div>
       <h1 id="judgeLoginTitle">СУДЕЙСКИЙ<br>ПУНКТ<span class="heading-dot">.</span></h1>
       <p class="login-description">Всё для приёма нормативов ГТО.<br>Войдите с общим паролем судей.</p>
-      <label for="judgePassword">Общий пароль</label>
-      <input name="password" id="judgePassword" type="password" autocomplete="current-password" required>
-      <button type="submit">Войти в судейский пункт <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 19 19 5M5 5h14v14"/></svg></button>
+      <fieldset class="pin-controls">
+        <label for="judgePassword">Общий пароль судей</label>
+        <input name="password" id="judgePassword" type="password" inputmode="none" autocomplete="current-password" aria-describedby="judgeLoginMessage" required>
+        <div class="pin-keypad" role="group" aria-label="Клавиатура для ввода пароля">
+          <button type="button" class="pin-key" data-digit="1">1</button>
+          <button type="button" class="pin-key" data-digit="2">2</button>
+          <button type="button" class="pin-key" data-digit="3">3</button>
+          <button type="button" class="pin-key" data-digit="4">4</button>
+          <button type="button" class="pin-key" data-digit="5">5</button>
+          <button type="button" class="pin-key" data-digit="6">6</button>
+          <button type="button" class="pin-key" data-digit="7">7</button>
+          <button type="button" class="pin-key" data-digit="8">8</button>
+          <button type="button" class="pin-key" data-digit="9">9</button>
+          <button type="button" class="pin-key pin-key-secondary" data-key="clear">Сброс</button>
+          <button type="button" class="pin-key" data-digit="0">0</button>
+          <button type="button" class="pin-key pin-key-secondary" data-key="backspace" aria-label="Удалить последний символ">
+            <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5h11v14H9L2 12Z"/><path d="m12 9 6 6m0-6-6 6"/></svg>
+          </button>
+        </div>
+        <button type="submit" class="pin-submit"><span>Войти</span> <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+        <button type="button" class="keyboard-toggle" id="judgeKeyboardToggle" aria-pressed="false">Ввести с клавиатуры</button>
+      </fieldset>
       <p id="judgeLoginMessage" role="status" aria-live="polite">Для работы требуется интернет.</p>
     </form>
   </div>
