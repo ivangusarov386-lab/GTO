@@ -1,197 +1,268 @@
-/* Shared surfaces, type and spacing for the judge workspace. */
+html,body {background:#101112}
+@font-face {font-family:Inter;src:url('fonts/inter.woff') format('woff');font-weight:100 900;font-display:swap}
+@font-face {font-family:Oswald;src:url('fonts/oswald.woff') format('woff');font-weight:200 700;font-display:swap}
 :root {
-  --bg-0:#121516; --bg-1:#1b1f20; --bg-2:#24292b; --line:#394143;
-  --text:#f1f3ee; --muted:#a7b0b1; --accent:#ff8b62; --accent-ink:#251108;
-  --accent-dim:rgba(255,139,98,.16); --good:#73d6aa; --bad:#ff8191;
-  --shadow-color:rgba(0,0,0,.24); --shadow-color-soft:rgba(0,0,0,.2);
-  --dashed-border:#586264; --hover-border:#879394;
-  --font-display:'Inter',system-ui,sans-serif;
-  --font-digits:'Oswald',system-ui,sans-serif;
+  --bg-0:#101112;--bg-1:#17191b;--bg-2:#202326;--line:#383d40;
+  --text:#f1f2e9;--muted:#a5abad;--accent:#d3f66a;--accent-ink:#162000;
+  --accent-dim:rgba(211,246,106,.12);--good:#92dfae;--bad:#ff8e9b;
+  --good-dim:rgba(146,223,174,.15);--bad-dim:rgba(255,142,155,.13);
+  --shadow-color:rgba(0,0,0,.18);--shadow-color-soft:rgba(0,0,0,.2);
+  --dashed-border:#51595d;--hover-border:#889296;--backdrop:rgba(0,0,0,.72);
+  --font-display:Inter,system-ui,sans-serif;--font-body:Inter,system-ui,sans-serif;--font-digits:Oswald,sans-serif;
 }
 :root[data-theme="light"] {
-  --bg-0:#f5f5f0; --bg-1:#ffffff; --bg-2:#f6f7f3; --line:#d8ddd7;
-  --text:#222a28; --muted:#626e68; --accent:#f16b3c; --accent-ink:#21140d;
-  --accent-dim:rgba(241,107,60,.12); --good:#19724c; --bad:#bb2540;
-  --shadow-color:rgba(28,41,31,.06); --shadow-color-soft:rgba(28,41,31,.1);
-  --dashed-border:#aab6ab; --hover-border:#849389;
+  --bg-0:#eeeee8;--bg-1:#fafaf5;--bg-2:#e7e8e1;--line:#bfc4bb;
+  --text:#191c18;--muted:#5d665b;--accent:#d3f66a;--accent-ink:#162000;
+  --accent-dim:rgba(155,191,52,.15);--good:#247346;--bad:#b62c43;
+  --good-dim:rgba(36,115,70,.12);--bad-dim:rgba(182,44,67,.12);
+  --dashed-border:#929d8d;--hover-border:#65755d;
+  --shadow-color:rgba(0,0,0,.06);--shadow-color-soft:rgba(0,0,0,.1);
 }
 html {scroll-behavior:smooth}
-body {background:var(--bg-0);font-size:15px;line-height:1.6}
+body {background:var(--bg-0);font:14px/1.6 var(--font-body);-webkit-font-smoothing:antialiased}
+::selection {background:#d3f66a;color:#162000}
 button,input {font:inherit}
-button,a,input {touch-action:manipulation}
-button {transition:background-color .18s ease,border-color .18s ease,color .18s ease,opacity .18s ease}
-button:active:not(:disabled) {filter:brightness(.93)}
+button,input,a {touch-action:manipulation}
+button {transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
+button:active:not(:disabled) {transform:scale(.98)}
+button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible {outline:2px solid var(--accent);outline-offset:4px}
 h1,h2,h3 {text-wrap:balance}
-button:focus-visible,a:focus-visible {outline:3px solid var(--accent);outline-offset:4px}
-.wrap {max-width:1180px;margin:0 auto 0 264px;padding:64px clamp(24px,4vw,64px) 56px}
-.site-header {text-align:left;margin-bottom:36px;padding-right:48px}
-.kicker {font:600 11px/1.5 var(--font-body);letter-spacing:.17em;color:var(--muted);margin-bottom:14px}
-h1 {font:600 clamp(30px,3.2vw,46px)/1.15 var(--font-body);text-transform:none;letter-spacing:-.055em;margin:0 0 12px}
-.heading-dot {color:var(--accent)}
-.subtitle {font-size:14px;line-height:1.6;color:var(--muted)}
-.panel {padding:28px 32px;border:1px solid var(--line);border-top:1px solid var(--line)!important;border-radius:20px;
-  box-shadow:0 4px 24px -12px var(--shadow-color)}
-.top-bar {margin-bottom:28px;padding-bottom:22px;gap:16px;flex-wrap:wrap}
-.current-tab {font-size:22px;letter-spacing:-.04em;text-transform:none;gap:12px}
-.current-tab svg {width:24px;height:24px;color:var(--text)}
-.connection {margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;white-space:nowrap}
-.conn-dot {width:7px;height:7px;margin:0;background:var(--muted)}
-.conn-dot.ok,.conn-dot.err {box-shadow:none}
-.top-fixed-left {display:none}
-.top-fixed-right {top:28px;right:32px;gap:8px;z-index:30}
+.app-header {max-width:1180px;margin:auto;height:92px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.app-brand {display:flex;align-items:center;gap:12px;color:var(--text);text-decoration:none;font:600 22px/1 var(--font-digits);letter-spacing:-.03em}
+.app-brand img {object-fit:contain}
+.brand-number {font-weight:400;color:var(--muted);margin-left:4px}
+.header-actions {display:flex;align-items:center;gap:12px}
+.top-fixed-left,.top-fixed-right {position:static;display:flex;gap:0;box-shadow:none}
+.top-fixed-left {position:relative}
+.top-fixed-left .fixed-label {pointer-events:none;height:auto;position:absolute;left:46px;top:50%;transform:translateY(-50%);
+  padding:0;border:0;border-radius:0;background:none;box-shadow:none;font:500 12px var(--font-body);letter-spacing:0;text-transform:none;color:var(--text)}
+.icon-btn {width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid var(--line);box-shadow:none}
+.menu-toggle-fixed {width:164px;border-radius:100px;justify-content:flex-start;padding-left:18px}
 .top-fixed-right .fixed-label {display:none}
-.icon-btn {width:44px;height:44px;background:var(--bg-1);border-radius:50%;box-shadow:none}
-.drawer {width:264px;max-width:none;transform:none;background:#202a26;color:#f4f6f0;border:0;box-shadow:none;
-  padding:28px 16px 18px;height:100dvh;z-index:50}
-.drawer-brand {display:flex;align-items:center;gap:12px;padding:4px 8px 32px}
-.drawer-brand .logo {width:48px;height:48px;margin:0;filter:none}
-.drawer-brand>div {font-size:21px;line-height:1.2;font-weight:700;letter-spacing:-.05em}
-.drawer-brand span {color:#ff9a75;font-weight:400}
-.drawer-brand small {display:block;font-size:9px;letter-spacing:0;font-weight:400;margin-top:6px;color:#b5c4b9}
-.drawer-header {border:0;padding:10px 12px 12px;font:500 10px var(--font-body);letter-spacing:.14em;color:#afc0b4}
-#drawerClose {display:none}
-.tabs {gap:3px;padding:0;overscroll-behavior:contain;flex:1}
-.tab-btn {border-radius:9px;padding:11px 14px;min-height:46px;color:#c3cfc6;font:500 13px/1.5 var(--font-body);text-transform:none;letter-spacing:0;gap:12px}
-.tab-btn svg {width:19px;height:19px;opacity:.85}
-.tab-btn:hover {background:#303d35;color:#fff}
-.tab-btn.active {background:#e8f0e5;border-color:#e8f0e5;color:#1e3125;font-weight:600}
-.tab-btn.active::after {content:"";margin-left:auto;width:6px;height:6px;border-radius:50%;background:#326741}
-.drawer-footer {border-top:1px solid #405047;display:flex;gap:12px;align-items:center;margin-top:22px;padding:20px 12px 4px;color:#afc0b4;font-size:10px;line-height:1.5}
-.club-mark {font:700 24px var(--font-digits);font-style:italic;color:#e2ebe1;letter-spacing:-.05em}
-.grid {gap:24px}
-label {text-align:left;font:500 12px/1.5 var(--font-body);letter-spacing:0;text-transform:none;margin-bottom:9px;color:var(--muted)}
-input[type="text"],input[type="number"],#judgePassword {min-height:52px;background:var(--bg-2);border:1px solid var(--line);
-  border-radius:10px;font-size:16px;letter-spacing:0;padding:13px 16px}
-input::placeholder {color:var(--muted);opacity:.7}
-input.valid,.value-input.valid {border-color:var(--line)!important;box-shadow:none!important}
-.value-row {gap:10px;margin-top:0}
-.value-row.small {gap:8px}
-.value-row .value-input {font:500 30px/1.2 var(--font-digits);text-align:center;min-height:56px}
-.adjust-btn,.value-row.small .adjust-btn {width:48px;height:52px;font:400 24px var(--font-body);border-radius:10px;background:var(--bg-1)}
-.hint {font-size:12px;line-height:1.7;margin-top:10px}
-.tap-area {width:100%;min-height:176px;margin-top:24px;border-radius:14px;font:600 16px/1.5 var(--font-body);
-  text-transform:none;letter-spacing:-.02em;flex-direction:column;gap:8px}
-.tap-area.active {border:1px solid var(--line);background:var(--bg-2);color:var(--text)}
-.tap-area.active:hover {border-color:var(--accent);background:var(--accent-dim)}
-.tap-plus {display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:32px;line-height:1}
-.tap-shortcut {font-size:11px;color:var(--muted);font-weight:400;letter-spacing:0}
-.controls {gap:10px;margin-top:20px}
-.controls button,.save-solo,.btn {min-height:48px;padding:12px 16px;font:600 12px/1.5 var(--font-body);text-transform:none;letter-spacing:0;border-radius:10px}
+.wrap {max-width:1180px;margin:0 auto;padding:0 0 56px}
+.site-header {position:relative;isolation:isolate;min-height:284px;padding:34px 40px;margin:0;border-radius:20px;overflow:hidden;
+  text-align:left;background:#101112 url('icons/track-editorial.webp') center 56%/cover no-repeat;color:#f1f2e9}
+.site-header::before {content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(12,13,14,.93),rgba(12,13,14,.7) 32%,rgba(12,13,14,0) 72%)}
+.kicker {font:500 10px/1.5 var(--font-body);text-transform:uppercase;letter-spacing:.2em;color:#d0d6cd;margin:0 0 22px}
+h1 {font:600 clamp(48px,5.8vw,82px)/.98 var(--font-digits);letter-spacing:-.035em;text-transform:uppercase;margin:0}
+.site-header h1>span {display:block}
+.heading-dot {color:var(--accent)}
+.subtitle {font:400 12px/1.6 var(--font-body);color:#c5ccc2;margin:20px 0 0}
+.discipline-rail {display:flex;align-items:center;gap:6px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+  padding:24px 0 20px;margin-bottom:8px;overscroll-behavior-x:contain}
+.quick-tab {flex-shrink:0;display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 16px;border:1px solid var(--line);
+  border-radius:100px;color:var(--muted);background:transparent;font:500 12px var(--font-body);white-space:nowrap;cursor:pointer}
+.quick-tab svg {width:16px;height:16px}
+.quick-tab:hover {color:var(--text);border-color:var(--hover-border)}
+.quick-tab.active {color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
+.panel {padding:28px 30px;border:1px solid var(--line)!important;border-radius:20px;background:var(--bg-1);box-shadow:none}
+.top-bar {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.current-tab {display:flex;align-items:center;gap:12px;padding:0;border:0;background:transparent;color:var(--text);text-transform:none;
+  letter-spacing:-.025em;font:500 22px/1.4 var(--font-body);cursor:pointer}
+.current-tab::after {content:"";width:7px;height:7px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
+  transform:rotate(45deg);margin:-4px 6px 0}
+.current-tab svg {width:22px;height:22px;color:var(--muted)}
+.connection {display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}
+.conn-dot {width:6px;height:6px;margin:0;box-shadow:none!important;background:var(--muted)}
+.section.active.split-workspace {display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,1fr);gap:32px}
+.entry-workspace,.result-history {min-width:0}
+.result-history {padding-left:28px;border-left:1px solid var(--line)}
+.results-heading {font:500 13px/1.5 var(--font-body);margin:0 0 16px;color:var(--text);text-transform:none;letter-spacing:0}
+.grid {gap:20px}
+label {font:400 12px/1.5 var(--font-body);text-transform:none;letter-spacing:0;color:var(--muted);text-align:left;margin-bottom:10px}
+input[type="text"],input[type="number"],#judgePassword {min-height:52px;border:1px solid var(--line);border-radius:9px;
+  padding:12px 14px;background:var(--bg-2);color:var(--text);font:400 16px var(--font-body);letter-spacing:0}
+input::placeholder {color:var(--muted);opacity:.8}
+input:focus {border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
+.value-row,.value-row.small {gap:8px;margin-top:0}
+.value-row .value-input {font:400 34px/1 var(--font-digits);text-align:center;font-variant-numeric:tabular-nums}
+.adjust-btn,.value-row.small .adjust-btn {width:44px;height:52px;border:1px solid var(--line);border-radius:9px;background:transparent;
+  font:400 24px var(--font-body);color:var(--text)}
+.adjust-btn:hover {background:var(--bg-2);color:var(--text);border-color:var(--hover-border)}
+.hint {font-size:11px;line-height:1.7;color:var(--muted);margin-top:10px}
+.tap-area {width:100%;min-height:148px;flex-direction:row;gap:14px;margin-top:20px;padding:20px;border:1px solid var(--line);
+  border-radius:12px;font:500 16px var(--font-body);letter-spacing:0;text-transform:none}
+.tap-area.active {background:var(--bg-2);color:var(--text);border-color:var(--line)}
+.tap-area:hover {border-color:var(--accent);background:var(--accent-dim)}
+.tap-plus {display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font:400 32px var(--font-body)}
+.tap-shortcut {display:none}
+.controls {gap:10px;margin-top:20px;grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+.controls button,.save-solo,.btn {min-height:46px;border-radius:100px;padding:12px 18px;font:500 12px/1.5 var(--font-body);
+  text-transform:none;letter-spacing:0;cursor:pointer}
 .controls button.primary,.save-solo {background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.controls button.warn {color:var(--muted);border-color:var(--line)}
-.controls button.warn:hover {color:var(--bad);border-color:var(--bad);background:var(--bad-dim)}
-.results-heading {margin:36px 0 0;padding-top:24px;border-top:1px solid var(--line);font:600 14px var(--font-body);letter-spacing:-.02em}
-table {margin-top:16px;border-radius:12px}
-th {font:500 11px var(--font-body);text-transform:none;letter-spacing:0;padding:14px 18px}
-td {font-size:14px;padding:14px 18px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.empty-row td {padding:30px 18px;color:var(--muted);font-size:12px}
+.controls button.primary:hover {filter:none;background:#e0ff8a;border-color:#e0ff8a}
+.controls button.warn {background:transparent;border-color:var(--line);color:var(--muted)}
+.controls button.warn:hover {background:var(--bad-dim);border-color:var(--bad);color:var(--bad)}
+.controls button:disabled {opacity:.4;cursor:not-allowed}
+table {margin-top:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th {padding:12px;font:400 10px var(--font-body);text-transform:none;letter-spacing:0;color:var(--muted);background:var(--bg-2)}
+td {padding:12px;font-size:13px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 tbody tr:nth-child(even) {background:var(--bg-2)}
-.section>table~.controls .primary {background:var(--bg-1);color:var(--text);border-color:var(--line)}
-.section>table~.controls button {font-size:11px;min-height:44px}
-.counter {background:var(--bg-2);border-radius:14px;border-color:var(--line);padding:28px}
+.empty-row td {padding:30px 16px;font-size:11px;line-height:1.7}
+.result-history .controls {grid-template-columns:1fr;gap:8px;margin-top:14px}
+.result-history .controls .primary {background:var(--bg-2);border-color:var(--line);color:var(--text)}
+.result-history .controls .primary:hover {border-color:var(--hover-border);background:var(--bg-2)}
+.result-history .controls button {min-height:44px;font-size:11px}
+.counter {background:var(--bg-2);border:1px solid var(--line);padding:20px;border-radius:14px;gap:12px}
 .counter::before {display:none}
-.counter .eyebrow,.eyebrow {font:500 10px var(--font-body);letter-spacing:.12em}
-.counter .digits {font:400 clamp(70px,9vw,108px)/1.15 var(--font-digits);letter-spacing:-.04em;color:var(--text);text-shadow:none;font-variant-numeric:tabular-nums}
-.dual-grid {gap:16px;margin-top:24px}
-.dual-card {background:var(--bg-1);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
-.dual-card h3 {font:600 14px var(--font-body);text-transform:none;letter-spacing:-.02em;margin:0 0 20px}
-.dual-card .save-solo {margin-top:16px;width:100%;background:var(--bg-2);color:var(--text);border:1px solid var(--line)}
-.dual-card .save-solo:hover {border-color:var(--accent)}
-.timer {font-family:var(--font-digits);font-size:80px;text-shadow:none;letter-spacing:-.03em;color:var(--text)}
+.counter .eyebrow,.eyebrow {font:400 10px var(--font-body);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.counter .digits {font:400 clamp(72px,8vw,110px)/1 var(--font-digits);letter-spacing:-.025em;color:var(--accent);text-shadow:none;font-variant-numeric:tabular-nums}
+.dual-grid {margin-top:20px;gap:12px}
+.dual-card {background:transparent;border:1px solid var(--line);padding:16px;border-radius:12px;min-width:0}
+.dual-card h3 {font:500 12px var(--font-body);text-transform:none;letter-spacing:0;margin:0 0 18px;color:var(--text)}
+.dual-card .save-solo {width:100%;margin-top:16px;background:var(--bg-2);color:var(--text);border:1px solid var(--line);font-size:11px;padding:12px 8px}
+.dual-card .save-solo:hover {border-color:var(--hover-border)}
+.timer {font:400 clamp(60px,8vw,100px)/1 var(--font-digits);color:var(--accent);text-shadow:none;letter-spacing:-.02em;padding:16px 0}
 .view-switch button,.saved-title,.saved-meta,.ctrl-laps,.lane-footer {font-family:var(--font-body);text-transform:none;letter-spacing:0}
-.lane-card {background:var(--bg-1)}
+.view-switch {border-radius:100px}
+.view-switch button {border-radius:100px;font-size:12px;min-height:44px}
+.saved-title {font-size:16px}
+.saved-item {background:var(--bg-2)}
+.saved-buttons .btn {min-height:44px}
+.lane-card {border-radius:14px;background:var(--bg-2)}
 .lane-card::before {display:none}
-.lane-time {text-shadow:none}
-.undo {min-height:44px;min-width:44px}
+.bib-input {font-family:var(--font-digits)}
 .athlete-input {min-height:44px}
-.saved-item {background:var(--bg-1)}
-.btn.off {animation:none}
-.sheet-notice,.sheet-error {border-radius:18px;font-size:16px}
-.sheet-notice strong,.sheet-error h2 {font:600 24px/1.3 var(--font-body);letter-spacing:-.04em}
-.sheet-notice {border-width:1px;box-shadow:0 12px 60px var(--shadow-color-soft)}
+.lane-time {color:var(--text);text-shadow:none}
+.undo {min-height:44px;min-width:44px;border-radius:50%}
+.btn.on {background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.off {background:var(--bad);color:#111;animation:none}
+:root[data-theme="light"] .btn.off {color:#fff}
+.sheet-notice,.sheet-error {border-radius:20px;font-size:15px}
+.sheet-notice strong,.sheet-error h2 {font:500 24px/1.2 var(--font-body);letter-spacing:-.04em}
+.sheet-notice {border-width:1px;box-shadow:0 4px 24px var(--shadow-color-soft)}
 .sheet-error {overscroll-behavior:contain}
-.toast {font-size:14px}
-.skip-link {position:fixed;top:12px;left:280px;padding:12px 20px;background:var(--bg-1);color:var(--text);z-index:100;transform:translateY(-160%);border:2px solid var(--accent);border-radius:8px}
+.sheet-error button {border-radius:100px}
+.toast {font-size:13px}
+.skip-link {position:fixed;top:12px;left:24px;padding:12px 20px;background:var(--bg-1);color:var(--text);z-index:100;
+  transform:translateY(-180%);border:2px solid var(--accent);border-radius:100px}
 .skip-link:focus {transform:none}
-/* Authentication is a full-size entry screen with the same club identity. */
-#judgeLogin {background:var(--bg-0);padding:40px 24px;overflow:auto}
-#judgeLogin::before {content:"";position:absolute;inset:0 50% 0 0;background:#202a26}
-#judgeLoginForm {position:relative;width:min(100%,1000px);border:0;border-radius:0;padding:48px 0 48px 56%;
-  background:transparent;box-shadow:none}
-.login-brand {position:absolute;left:0;top:48px;font:600 50px/1 var(--font-digits);letter-spacing:-.04em;color:#f1f6ed}
-.login-brand span {color:#ff9a75;font-weight:400}
-.login-eyebrow {position:absolute;left:0;top:120px;color:#b5c4b9;font-size:11px}
-#judgeLoginForm::before {content:"ГТО";position:absolute;left:0;top:205px;font:600 160px/1 var(--font-digits);font-style:italic;color:#405447;letter-spacing:-.07em}
-#judgeLoginForm h1 {font:600 clamp(28px,3vw,40px)/1.2 var(--font-body);letter-spacing:-.055em;text-transform:none;margin:0 0 20px}
-.login-description {font-size:14px;line-height:1.8;color:var(--muted);margin:0 0 32px;max-width:380px}
-#judgeLoginForm label {font-size:12px}
-#judgeLoginForm input {border-radius:10px;min-height:56px;background:var(--bg-1)}
-#judgeLoginForm button {min-height:56px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
-#judgeLoginForm button span {font-size:20px}
+#workspace {outline:none}
+/* The discipline picker is a keyboard-accessible sheet on every screen size. */
+.drawer {width:360px;max-width:90vw;height:100dvh;padding:24px 18px 20px;border-right:1px solid var(--line);
+  background:var(--bg-1);color:var(--text);transform:translateX(-100%);box-shadow:none;overscroll-behavior:contain}
+.drawer.open {transform:translateX(0)}
+.drawer-brand {display:flex;align-items:center;gap:12px;padding:4px 10px 28px}
+.drawer-brand .logo {width:44px;height:44px;margin:0;filter:none;object-fit:contain}
+.drawer-brand>div {font:500 22px/1.3 var(--font-digits)}
+.drawer-brand span {color:var(--accent)}
+.drawer-brand small {display:block;font:400 10px var(--font-body);color:var(--muted);margin-top:4px}
+.drawer-header {padding:0 10px 18px;border:0;font:400 11px var(--font-body);letter-spacing:.12em}
+#drawerClose {display:flex}
+.tabs {padding:0;gap:4px;flex:1}
+.tab-btn {min-height:46px;padding:12px 16px;border:1px solid transparent;border-radius:100px;color:var(--muted);
+  font:500 13px var(--font-body);text-transform:none;letter-spacing:0}
+.tab-btn svg {width:18px;height:18px}
+.tab-btn:hover {background:var(--bg-2);color:var(--text)}
+.tab-btn.active {background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.drawer-footer {display:flex;align-items:center;gap:12px;padding:20px 12px 0;margin-top:20px;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+.club-mark {font:600 26px var(--font-digits);color:var(--text)}
+.nav-open {overflow:hidden}
+/* Full-bleed track imagery gives the sign-in page its own sporting identity. */
+#judgeLogin {padding:40px;overflow:auto;background:#101112;color:#f1f2e9}
+#judgeLogin::before {content:"";position:absolute;inset:0 50% 0 0;background:linear-gradient(0deg,rgba(0,0,0,.35),transparent 70%),url('icons/track-editorial.webp') 68% center/cover}
+#judgeLoginForm {position:relative;width:min(100%,1100px);padding:64px 0 64px min(55vw,650px);border:0;border-radius:0;background:transparent;color:#f1f2e9}
+.login-brand {position:absolute;left:0;top:50px;font:500 40px/1 var(--font-digits);letter-spacing:-.03em}
+.login-brand span {color:#d3f66a}
+.login-eyebrow {position:absolute;left:0;top:105px;font-size:11px;color:#d2d5ce}
+#judgeLoginForm::before {content:"";position:absolute;left:0;top:150px;width:100px;height:1px;background:rgba(255,255,255,.4)}
+#judgeLoginForm h1 {font:500 clamp(44px,5vw,72px)/1 var(--font-digits);letter-spacing:-.03em;text-transform:uppercase;margin:0 0 24px;color:#f1f2e9}
+.login-description {font-size:13px;line-height:1.8;color:#a5abad;margin:0 0 30px}
+#judgeLoginForm label {color:#b2b8b9;font-size:12px}
+#judgeLoginForm input {min-height:56px;background:#202326;border:1px solid #42494c;border-radius:10px;color:#f1f2e9}
+#judgeLoginForm button {min-height:54px;border-radius:100px;padding:14px 20px;margin-top:16px;font-size:12px;font-weight:500;
+  background:#d3f66a;color:#162000;display:flex;align-items:center;justify-content:space-between;gap:16px}
+#judgeLoginForm button:hover {background:#e0ff8a}
 #judgeLoginForm button:disabled {opacity:.65;cursor:wait}
-#judgeLoginMessage {font-size:12px;line-height:1.7;color:var(--muted);margin-top:20px;min-height:42px}
-@media(min-width:1600px) {.wrap {margin-left:auto;margin-right:auto;transform:translateX(132px);max-width:1180px}}
+#judgeLoginMessage {font-size:12px;color:#a5abad;line-height:1.7;margin:20px 0 0;min-height:42px}
+/* Enter once, keep the working controls still. */
+@keyframes editorialEnter {from {opacity:0;transform:translateY(18px)}to {opacity:1;transform:none}}
+.app-header {animation:editorialEnter .65s cubic-bezier(.22,1,.36,1) both}
+.site-header .kicker {animation:editorialEnter .75s .05s cubic-bezier(.22,1,.36,1) both}
+.site-header h1 {animation:editorialEnter .85s .12s cubic-bezier(.22,1,.36,1) both}
+.site-header .subtitle {animation:editorialEnter .85s .2s cubic-bezier(.22,1,.36,1) both}
+@media(max-width:1240px) {.app-header,.wrap {margin-left:28px;margin-right:28px}}
 @media(max-width:1000px) {
-  .wrap {margin:0 auto;padding:100px 28px 40px;max-width:900px}
-  .site-header {margin-bottom:28px}
-  .top-fixed-left {display:flex;top:calc(env(safe-area-inset-top,0px) + 16px);left:24px;gap:10px}
-  .top-fixed-left .fixed-label {border:0;box-shadow:none;background:var(--bg-0);font:500 12px var(--font-body);text-transform:none;letter-spacing:0;padding:0}
-  .top-fixed-right {top:calc(env(safe-area-inset-top,0px) + 16px);right:24px}
-  .drawer {transform:translateX(-100%);max-width:86vw;width:292px;padding-top:20px}
-  .drawer.open {transform:translateX(0)}
-  #drawerClose {display:flex;width:36px;height:36px;background:#303d35;color:#fff;border-color:#526258}
-  .drawer-brand {padding-bottom:20px}
-  .nav-open {overflow:hidden}
-  .nav-open .wrap,.nav-open .top-fixed-right {pointer-events:none}
-  .skip-link {left:24px}
+  .section.active.split-workspace {grid-template-columns:minmax(0,1.5fr) minmax(230px,1fr);gap:24px}
+  .result-history {padding-left:24px}
+  .panel {padding:24px}
+  .grid,.dual-grid {grid-template-columns:1fr}
 }
-@media(max-width:600px) {
-  .wrap {padding:96px 16px 32px}
-  .site-header {padding-right:0;margin-bottom:24px}
-  h1 {font-size:32px}
-  .kicker {font-size:10px;margin-bottom:10px}
-  .subtitle {font-size:12px;max-width:280px}
-  .top-fixed-left {left:16px}
-  .top-fixed-right {right:16px}
-  .top-fixed-left .icon-btn,.top-fixed-right .icon-btn {width:44px;height:44px}
-  .panel {padding:20px 16px;border-radius:16px}
-  .top-bar {gap:8px;margin-bottom:24px;padding-bottom:18px}
-  .current-tab {font-size:20px}
-  .connection {font-size:10px}
-  .grid {gap:18px}
-  .tap-area {min-height:156px;margin-top:18px}
-  .tap-shortcut {display:none}
+@media(max-width:760px) {
+  .app-header {height:80px}
+  .app-header,.wrap {margin-left:20px;margin-right:20px}
+  .app-brand {font-size:21px;gap:9px}
+  .app-brand img {width:34px;height:34px}
+  .header-actions {gap:8px}
+  .menu-toggle-fixed {width:132px;padding-left:14px}
+  .top-fixed-left .fixed-label {font-size:11px;left:39px}
+  .site-header {min-height:244px;padding:28px;background-position:58% center;border-radius:16px}
+  .site-header::before {background:linear-gradient(90deg,rgba(12,13,14,.9),rgba(12,13,14,.4) 60%,transparent)}
+  .site-header h1 {font-size:clamp(40px,7.8vw,58px)}
+  .kicker {font-size:9px;margin-bottom:24px}
+  .subtitle {font-size:11px;margin-top:22px}
+  .discipline-rail {padding:18px 0;margin-bottom:4px}
+  .quick-tab {font-size:11px;padding:10px 14px}
+  .panel {padding:22px 18px;border-radius:16px}
+  .top-bar {gap:10px;margin-bottom:24px;padding-bottom:20px}
+  .current-tab {font-size:18px;gap:9px}
+  .current-tab svg {width:18px;height:18px}
+  .connection {font-size:10px;gap:6px}
+  .section.active.split-workspace {display:block}
+  .result-history {padding:24px 0 0;margin-top:28px;border-left:0;border-top:1px solid var(--line)}
+  .grid {grid-template-columns:1fr;gap:18px}
+  .tap-area {min-height:124px;margin-top:18px;font-size:14px}
+  .tap-plus {width:42px;height:42px}
+  .result-history .controls {grid-template-columns:1fr 1fr}
+  .dual-grid {grid-template-columns:1fr 1fr;gap:10px}
+  .dual-card {padding:14px}
+  .controls button,.save-solo,.btn {min-height:48px;font-size:12px}
+  .timer {font-size:66px}
+  .counter .digits {font-size:86px}
+}
+@media(max-width:480px) {
+  .app-header,.wrap {margin-left:16px;margin-right:16px}
+  .app-brand {font-size:19px}
+  .app-brand img {width:30px;height:30px}
+  .menu-toggle-fixed {width:44px;justify-content:center;padding:0}
+  .top-fixed-left .fixed-label {display:none}
+  .site-header {padding:24px;min-height:240px}
+  .site-header h1 {font-size:clamp(38px,10.5vw,50px)}
+  .panel {padding:20px 16px}
+  .top-bar {align-items:flex-start;flex-direction:column;gap:12px}
+  .current-tab {font-size:21px}
+  .dual-grid {grid-template-columns:1fr}
   .controls {grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
   .counter {padding:24px 16px}
-  .counter .digits {font-size:84px}
-  .dual-grid {grid-template-columns:1fr;gap:12px}
-  .dual-card {padding:16px}
-  .dual-card h3 {margin-bottom:16px}
-  .value-row .value-input {font-size:30px}
-  .results-heading {margin-top:28px}
-  th,td {padding:12px}
-  .timer {font-size:64px}
-  #judgeLogin {padding:36px 24px;display:block;min-height:100dvh}
-  #judgeLogin::before {display:none}
-  #judgeLoginForm {max-width:420px;margin:0 auto;padding:0;border:0}
-  .login-brand {position:static;color:var(--text);font-size:32px;margin-bottom:8px}
-  .login-brand span {color:var(--accent)}
-  .login-eyebrow {position:static;color:var(--muted);font-size:10px;margin-bottom:60px}
+  .lanes {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lane-card {padding:10px;min-width:0}
+  .timer {font-size:60px}
+  #judgeLogin {padding:32px 24px;display:block}
+  #judgeLogin::before {inset:0 0 auto;height:200px;background-position:center 44%;opacity:.65}
+  #judgeLoginForm {width:100%;max-width:420px;padding:232px 0 0;margin:0 auto}
+  .login-brand {top:10px;font-size:32px}
+  .login-eyebrow {top:55px;font-size:10px}
   #judgeLoginForm::before {display:none}
-  #judgeLoginForm h1 {font-size:34px}
-  .login-description {font-size:13px;margin-bottom:28px}
+  #judgeLoginForm h1 {font-size:54px}
 }
-@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
-#judgeLoginForm {padding-left:min(56vw,560px)}
-#judgeLoginForm h1 {color:var(--text)}
-.drawer-brand .logo {object-fit:contain}
-.value-row.small .value-input {font-size:40px}
-#workspace {outline:none}
-@media(max-width:600px) {
-  #judgeLoginForm {padding:0}
-  #judgeLoginForm h1 {font-size:36px}
+@media(prefers-reduced-motion:reduce) {
+  html {scroll-behavior:auto}
+  .app-header,.site-header .kicker,.site-header h1,.site-header .subtitle {animation:none}
 }
-.btn.on {color:#132b20}
-:root[data-theme="light"] .btn.on {color:#fff}
-:root:not([data-theme="light"]) .btn.off {color:#251108}
-.dual-card h3,.lane-time {color:var(--text)}
+.top-fixed-left {top:auto;left:auto;right:auto;bottom:auto}
+@media(max-width:480px) {
+  .site-header {min-height:210px}
+  .site-header .kicker {margin-bottom:18px}
+  .site-header .subtitle {margin-top:18px}
+}
+html[data-theme="light"] {background:#eeeee8}
+#mainPanel {scroll-margin-top:24px}
+@media(min-width:481px) and (max-width:760px) {
+  #judgeLogin {padding:32px 24px;display:block}
+  #judgeLogin::before {inset:0 0 auto;height:200px;background-position:center 44%;opacity:.65}
+  #judgeLoginForm {width:100%;max-width:420px;padding:232px 0 0;margin:0 auto}
+  .login-brand {top:10px;font-size:32px}
+  .login-eyebrow {top:55px;font-size:10px}
+  #judgeLoginForm::before {display:none}
+  #judgeLoginForm h1 {font-size:54px}
+}
