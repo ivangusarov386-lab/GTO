@@ -1,10 +1,12 @@
 // Service worker: кэш оболочки «Приём нормативов».
 // Открытие оболочки без сети не даёт доступ к работе: требуется проверка сеанса.
-const CACHE_NAME = 'gto-cache-v5';
+const CACHE_NAME = 'gto-cache-v6';
 
 const APP_SHELL = [
   './',
   './index.html',
+  './redesign.css',
+  './icons/club-logo.png',
   './manifest.json',
   './judge-access.js',
   './icons/icon-192.png',

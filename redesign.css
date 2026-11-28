@@ -1,0 +1,197 @@
+/* Shared surfaces, type and spacing for the judge workspace. */
+:root {
+  --bg-0:#121516; --bg-1:#1b1f20; --bg-2:#24292b; --line:#394143;
+  --text:#f1f3ee; --muted:#a7b0b1; --accent:#ff8b62; --accent-ink:#251108;
+  --accent-dim:rgba(255,139,98,.16); --good:#73d6aa; --bad:#ff8191;
+  --shadow-color:rgba(0,0,0,.24); --shadow-color-soft:rgba(0,0,0,.2);
+  --dashed-border:#586264; --hover-border:#879394;
+  --font-display:'Inter',system-ui,sans-serif;
+  --font-digits:'Oswald',system-ui,sans-serif;
+}
+:root[data-theme="light"] {
+  --bg-0:#f5f5f0; --bg-1:#ffffff; --bg-2:#f6f7f3; --line:#d8ddd7;
+  --text:#222a28; --muted:#626e68; --accent:#f16b3c; --accent-ink:#21140d;
+  --accent-dim:rgba(241,107,60,.12); --good:#19724c; --bad:#bb2540;
+  --shadow-color:rgba(28,41,31,.06); --shadow-color-soft:rgba(28,41,31,.1);
+  --dashed-border:#aab6ab; --hover-border:#849389;
+}
+html {scroll-behavior:smooth}
+body {background:var(--bg-0);font-size:15px;line-height:1.6}
+button,input {font:inherit}
+button,a,input {touch-action:manipulation}
+button {transition:background-color .18s ease,border-color .18s ease,color .18s ease,opacity .18s ease}
+button:active:not(:disabled) {filter:brightness(.93)}
+h1,h2,h3 {text-wrap:balance}
+button:focus-visible,a:focus-visible {outline:3px solid var(--accent);outline-offset:4px}
+.wrap {max-width:1180px;margin:0 auto 0 264px;padding:64px clamp(24px,4vw,64px) 56px}
+.site-header {text-align:left;margin-bottom:36px;padding-right:48px}
+.kicker {font:600 11px/1.5 var(--font-body);letter-spacing:.17em;color:var(--muted);margin-bottom:14px}
+h1 {font:600 clamp(30px,3.2vw,46px)/1.15 var(--font-body);text-transform:none;letter-spacing:-.055em;margin:0 0 12px}
+.heading-dot {color:var(--accent)}
+.subtitle {font-size:14px;line-height:1.6;color:var(--muted)}
+.panel {padding:28px 32px;border:1px solid var(--line);border-top:1px solid var(--line)!important;border-radius:20px;
+  box-shadow:0 4px 24px -12px var(--shadow-color)}
+.top-bar {margin-bottom:28px;padding-bottom:22px;gap:16px;flex-wrap:wrap}
+.current-tab {font-size:22px;letter-spacing:-.04em;text-transform:none;gap:12px}
+.current-tab svg {width:24px;height:24px;color:var(--text)}
+.connection {margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;white-space:nowrap}
+.conn-dot {width:7px;height:7px;margin:0;background:var(--muted)}
+.conn-dot.ok,.conn-dot.err {box-shadow:none}
+.top-fixed-left {display:none}
+.top-fixed-right {top:28px;right:32px;gap:8px;z-index:30}
+.top-fixed-right .fixed-label {display:none}
+.icon-btn {width:44px;height:44px;background:var(--bg-1);border-radius:50%;box-shadow:none}
+.drawer {width:264px;max-width:none;transform:none;background:#202a26;color:#f4f6f0;border:0;box-shadow:none;
+  padding:28px 16px 18px;height:100dvh;z-index:50}
+.drawer-brand {display:flex;align-items:center;gap:12px;padding:4px 8px 32px}
+.drawer-brand .logo {width:48px;height:48px;margin:0;filter:none}
+.drawer-brand>div {font-size:21px;line-height:1.2;font-weight:700;letter-spacing:-.05em}
+.drawer-brand span {color:#ff9a75;font-weight:400}
+.drawer-brand small {display:block;font-size:9px;letter-spacing:0;font-weight:400;margin-top:6px;color:#b5c4b9}
+.drawer-header {border:0;padding:10px 12px 12px;font:500 10px var(--font-body);letter-spacing:.14em;color:#afc0b4}
+#drawerClose {display:none}
+.tabs {gap:3px;padding:0;overscroll-behavior:contain;flex:1}
+.tab-btn {border-radius:9px;padding:11px 14px;min-height:46px;color:#c3cfc6;font:500 13px/1.5 var(--font-body);text-transform:none;letter-spacing:0;gap:12px}
+.tab-btn svg {width:19px;height:19px;opacity:.85}
+.tab-btn:hover {background:#303d35;color:#fff}
+.tab-btn.active {background:#e8f0e5;border-color:#e8f0e5;color:#1e3125;font-weight:600}
+.tab-btn.active::after {content:"";margin-left:auto;width:6px;height:6px;border-radius:50%;background:#326741}
+.drawer-footer {border-top:1px solid #405047;display:flex;gap:12px;align-items:center;margin-top:22px;padding:20px 12px 4px;color:#afc0b4;font-size:10px;line-height:1.5}
+.club-mark {font:700 24px var(--font-digits);font-style:italic;color:#e2ebe1;letter-spacing:-.05em}
+.grid {gap:24px}
+label {text-align:left;font:500 12px/1.5 var(--font-body);letter-spacing:0;text-transform:none;margin-bottom:9px;color:var(--muted)}
+input[type="text"],input[type="number"],#judgePassword {min-height:52px;background:var(--bg-2);border:1px solid var(--line);
+  border-radius:10px;font-size:16px;letter-spacing:0;padding:13px 16px}
+input::placeholder {color:var(--muted);opacity:.7}
+input.valid,.value-input.valid {border-color:var(--line)!important;box-shadow:none!important}
+.value-row {gap:10px;margin-top:0}
+.value-row.small {gap:8px}
+.value-row .value-input {font:500 30px/1.2 var(--font-digits);text-align:center;min-height:56px}
+.adjust-btn,.value-row.small .adjust-btn {width:48px;height:52px;font:400 24px var(--font-body);border-radius:10px;background:var(--bg-1)}
+.hint {font-size:12px;line-height:1.7;margin-top:10px}
+.tap-area {width:100%;min-height:176px;margin-top:24px;border-radius:14px;font:600 16px/1.5 var(--font-body);
+  text-transform:none;letter-spacing:-.02em;flex-direction:column;gap:8px}
+.tap-area.active {border:1px solid var(--line);background:var(--bg-2);color:var(--text)}
+.tap-area.active:hover {border-color:var(--accent);background:var(--accent-dim)}
+.tap-plus {display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:32px;line-height:1}
+.tap-shortcut {font-size:11px;color:var(--muted);font-weight:400;letter-spacing:0}
+.controls {gap:10px;margin-top:20px}
+.controls button,.save-solo,.btn {min-height:48px;padding:12px 16px;font:600 12px/1.5 var(--font-body);text-transform:none;letter-spacing:0;border-radius:10px}
+.controls button.primary,.save-solo {background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.controls button.warn {color:var(--muted);border-color:var(--line)}
+.controls button.warn:hover {color:var(--bad);border-color:var(--bad);background:var(--bad-dim)}
+.results-heading {margin:36px 0 0;padding-top:24px;border-top:1px solid var(--line);font:600 14px var(--font-body);letter-spacing:-.02em}
+table {margin-top:16px;border-radius:12px}
+th {font:500 11px var(--font-body);text-transform:none;letter-spacing:0;padding:14px 18px}
+td {font-size:14px;padding:14px 18px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.empty-row td {padding:30px 18px;color:var(--muted);font-size:12px}
+tbody tr:nth-child(even) {background:var(--bg-2)}
+.section>table~.controls .primary {background:var(--bg-1);color:var(--text);border-color:var(--line)}
+.section>table~.controls button {font-size:11px;min-height:44px}
+.counter {background:var(--bg-2);border-radius:14px;border-color:var(--line);padding:28px}
+.counter::before {display:none}
+.counter .eyebrow,.eyebrow {font:500 10px var(--font-body);letter-spacing:.12em}
+.counter .digits {font:400 clamp(70px,9vw,108px)/1.15 var(--font-digits);letter-spacing:-.04em;color:var(--text);text-shadow:none;font-variant-numeric:tabular-nums}
+.dual-grid {gap:16px;margin-top:24px}
+.dual-card {background:var(--bg-1);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.dual-card h3 {font:600 14px var(--font-body);text-transform:none;letter-spacing:-.02em;margin:0 0 20px}
+.dual-card .save-solo {margin-top:16px;width:100%;background:var(--bg-2);color:var(--text);border:1px solid var(--line)}
+.dual-card .save-solo:hover {border-color:var(--accent)}
+.timer {font-family:var(--font-digits);font-size:80px;text-shadow:none;letter-spacing:-.03em;color:var(--text)}
+.view-switch button,.saved-title,.saved-meta,.ctrl-laps,.lane-footer {font-family:var(--font-body);text-transform:none;letter-spacing:0}
+.lane-card {background:var(--bg-1)}
+.lane-card::before {display:none}
+.lane-time {text-shadow:none}
+.undo {min-height:44px;min-width:44px}
+.athlete-input {min-height:44px}
+.saved-item {background:var(--bg-1)}
+.btn.off {animation:none}
+.sheet-notice,.sheet-error {border-radius:18px;font-size:16px}
+.sheet-notice strong,.sheet-error h2 {font:600 24px/1.3 var(--font-body);letter-spacing:-.04em}
+.sheet-notice {border-width:1px;box-shadow:0 12px 60px var(--shadow-color-soft)}
+.sheet-error {overscroll-behavior:contain}
+.toast {font-size:14px}
+.skip-link {position:fixed;top:12px;left:280px;padding:12px 20px;background:var(--bg-1);color:var(--text);z-index:100;transform:translateY(-160%);border:2px solid var(--accent);border-radius:8px}
+.skip-link:focus {transform:none}
+/* Authentication is a full-size entry screen with the same club identity. */
+#judgeLogin {background:var(--bg-0);padding:40px 24px;overflow:auto}
+#judgeLogin::before {content:"";position:absolute;inset:0 50% 0 0;background:#202a26}
+#judgeLoginForm {position:relative;width:min(100%,1000px);border:0;border-radius:0;padding:48px 0 48px 56%;
+  background:transparent;box-shadow:none}
+.login-brand {position:absolute;left:0;top:48px;font:600 50px/1 var(--font-digits);letter-spacing:-.04em;color:#f1f6ed}
+.login-brand span {color:#ff9a75;font-weight:400}
+.login-eyebrow {position:absolute;left:0;top:120px;color:#b5c4b9;font-size:11px}
+#judgeLoginForm::before {content:"ГТО";position:absolute;left:0;top:205px;font:600 160px/1 var(--font-digits);font-style:italic;color:#405447;letter-spacing:-.07em}
+#judgeLoginForm h1 {font:600 clamp(28px,3vw,40px)/1.2 var(--font-body);letter-spacing:-.055em;text-transform:none;margin:0 0 20px}
+.login-description {font-size:14px;line-height:1.8;color:var(--muted);margin:0 0 32px;max-width:380px}
+#judgeLoginForm label {font-size:12px}
+#judgeLoginForm input {border-radius:10px;min-height:56px;background:var(--bg-1)}
+#judgeLoginForm button {min-height:56px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
+#judgeLoginForm button span {font-size:20px}
+#judgeLoginForm button:disabled {opacity:.65;cursor:wait}
+#judgeLoginMessage {font-size:12px;line-height:1.7;color:var(--muted);margin-top:20px;min-height:42px}
+@media(min-width:1600px) {.wrap {margin-left:auto;margin-right:auto;transform:translateX(132px);max-width:1180px}}
+@media(max-width:1000px) {
+  .wrap {margin:0 auto;padding:100px 28px 40px;max-width:900px}
+  .site-header {margin-bottom:28px}
+  .top-fixed-left {display:flex;top:calc(env(safe-area-inset-top,0px) + 16px);left:24px;gap:10px}
+  .top-fixed-left .fixed-label {border:0;box-shadow:none;background:var(--bg-0);font:500 12px var(--font-body);text-transform:none;letter-spacing:0;padding:0}
+  .top-fixed-right {top:calc(env(safe-area-inset-top,0px) + 16px);right:24px}
+  .drawer {transform:translateX(-100%);max-width:86vw;width:292px;padding-top:20px}
+  .drawer.open {transform:translateX(0)}
+  #drawerClose {display:flex;width:36px;height:36px;background:#303d35;color:#fff;border-color:#526258}
+  .drawer-brand {padding-bottom:20px}
+  .nav-open {overflow:hidden}
+  .nav-open .wrap,.nav-open .top-fixed-right {pointer-events:none}
+  .skip-link {left:24px}
+}
+@media(max-width:600px) {
+  .wrap {padding:96px 16px 32px}
+  .site-header {padding-right:0;margin-bottom:24px}
+  h1 {font-size:32px}
+  .kicker {font-size:10px;margin-bottom:10px}
+  .subtitle {font-size:12px;max-width:280px}
+  .top-fixed-left {left:16px}
+  .top-fixed-right {right:16px}
+  .top-fixed-left .icon-btn,.top-fixed-right .icon-btn {width:44px;height:44px}
+  .panel {padding:20px 16px;border-radius:16px}
+  .top-bar {gap:8px;margin-bottom:24px;padding-bottom:18px}
+  .current-tab {font-size:20px}
+  .connection {font-size:10px}
+  .grid {gap:18px}
+  .tap-area {min-height:156px;margin-top:18px}
+  .tap-shortcut {display:none}
+  .controls {grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}
+  .counter {padding:24px 16px}
+  .counter .digits {font-size:84px}
+  .dual-grid {grid-template-columns:1fr;gap:12px}
+  .dual-card {padding:16px}
+  .dual-card h3 {margin-bottom:16px}
+  .value-row .value-input {font-size:30px}
+  .results-heading {margin-top:28px}
+  th,td {padding:12px}
+  .timer {font-size:64px}
+  #judgeLogin {padding:36px 24px;display:block;min-height:100dvh}
+  #judgeLogin::before {display:none}
+  #judgeLoginForm {max-width:420px;margin:0 auto;padding:0;border:0}
+  .login-brand {position:static;color:var(--text);font-size:32px;margin-bottom:8px}
+  .login-brand span {color:var(--accent)}
+  .login-eyebrow {position:static;color:var(--muted);font-size:10px;margin-bottom:60px}
+  #judgeLoginForm::before {display:none}
+  #judgeLoginForm h1 {font-size:34px}
+  .login-description {font-size:13px;margin-bottom:28px}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+#judgeLoginForm {padding-left:min(56vw,560px)}
+#judgeLoginForm h1 {color:var(--text)}
+.drawer-brand .logo {object-fit:contain}
+.value-row.small .value-input {font-size:40px}
+#workspace {outline:none}
+@media(max-width:600px) {
+  #judgeLoginForm {padding:0}
+  #judgeLoginForm h1 {font-size:36px}
+}
+.btn.on {color:#132b20}
+:root[data-theme="light"] .btn.on {color:#fff}
+:root:not([data-theme="light"]) .btn.off {color:#251108}
+.dual-card h3,.lane-time {color:var(--text)}
