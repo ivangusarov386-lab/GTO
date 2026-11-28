@@ -381,13 +381,14 @@
 <body class="judge-locked">
   <div id="judgeLogin" role="dialog" aria-modal="true" aria-labelledby="judgeLoginTitle">
     <form id="judgeLoginForm">
-      <div class="login-brand">ЛИДЕР <span>548</span></div>
-      <div class="login-eyebrow">Школьный спортивный клуб · ГТО</div>
-      <h1 id="judgeLoginTitle">СУДЕЙСКИЙ<br>ПУНКТ<span class="heading-dot">.</span></h1>
-      <p class="login-description">Всё для приёма нормативов ГТО.<br>Войдите с общим паролем судей.</p>
+      <h1 id="judgeLoginTitle">Введите пароль</h1>
       <fieldset class="pin-controls">
-        <label for="judgePassword">Общий пароль судей</label>
-        <input name="password" id="judgePassword" type="password" inputmode="none" autocomplete="current-password" aria-describedby="judgeLoginMessage" required>
+        <label class="pin-label" for="judgePassword">Общий пароль судей</label>
+        <div class="pin-entry">
+          <div id="judgePasswordIndicators" class="pin-indicators" aria-hidden="true"></div>
+          <input name="password" id="judgePassword" type="password" inputmode="none" autocomplete="current-password" aria-describedby="judgePasswordCount judgeLoginMessage" required>
+        </div>
+        <span id="judgePasswordCount" class="pin-label" role="status" aria-live="polite"></span>
         <div class="pin-keypad" role="group" aria-label="Клавиатура для ввода пароля">
           <button type="button" class="pin-key" data-digit="1">1</button>
           <button type="button" class="pin-key" data-digit="2">2</button>

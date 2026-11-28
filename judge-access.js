@@ -13,6 +13,21 @@
   const buttonLabel = button.querySelector('span');
   const controls = form.querySelector('.pin-controls');
   const keyboardToggle = document.getElementById('judgeKeyboardToggle');
+  const indicators = document.getElementById('judgePasswordIndicators');
+  const passwordCount = document.getElementById('judgePasswordCount');
+  function updateIndicators() {
+    const count = Array.from(password.value).length;
+    const dots = Array.from({length: count}, () => {
+      const dot = document.createElement('span');
+      dot.className = 'pin-dot';
+      return dot;
+    });
+    indicators.replaceChildren(...dots);
+    passwordCount.textContent = `Введено символов: ${count}`;
+  }
+  password.addEventListener('input', updateIndicators);
+  password.addEventListener('change', updateIndicators);
+  updateIndicators();
   form.querySelector('.pin-keypad').addEventListener('click', event => {
     const key = event.target.closest('button');
     if (!key || controls.disabled) return;
@@ -32,6 +47,7 @@
   keyboardToggle.addEventListener('click', () => {
     const useKeyboard = password.inputMode === 'none';
     password.inputMode = useKeyboard ? 'text' : 'none';
+    form.classList.toggle('use-keyboard', useKeyboard);
     keyboardToggle.setAttribute('aria-pressed', String(useKeyboard));
     keyboardToggle.textContent = useKeyboard ? 'Использовать кнопки на экране' : 'Ввести с клавиатуры';
     password.focus({preventScroll: true});
@@ -95,6 +111,7 @@
       if (!result.ok || !result.session) { message.textContent = result.error || 'Вход не выполнен'; return; }
       session = result.session;
       password.value = '';
+      updateIndicators();
       try { sessionStorage.setItem(key, session); } catch (_) {}
       unlock();
     } catch (_) {
